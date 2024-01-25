@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './table-form.component.css'
 })
 export class TableFormComponent {
- title = "HEJSAN, SVEJSAN!"
+ title = "TableFormComponent"
 }

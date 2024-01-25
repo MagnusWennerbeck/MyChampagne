@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './table-list.component.css'
 })
 export class TableListComponent {
-
+  title = "TableListComponent"
 }

@@ -1,1 +1,5 @@
-<p>grid works!</p>
+<h1>{{title}}</h1>
+<!-- <p>This text is from {{title}}</p> -->
+<div *ngFor="let item of data">{{ item.id }},   {{ item.name }},   {{ item.description }}  </div>
+
+<!-- <div let item of data>{{ item.name }}</div> -->

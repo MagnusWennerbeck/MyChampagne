@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './table-selector.component.css'
 })
 export class TableSelectorComponent {
-
+  title = "TableSelectorComponent"
 }

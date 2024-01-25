@@ -1,8 +1,17 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common'; 
 
-import { TableFormComponent } from './table/table-form/table-form.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { HeaderMenuComponent } from './header-menu/header-menu.component';
+
 import { TableModule } from './table/table.module';
+import { TableGridComponent } from './table/table-grid/table-grid.component';
+import { TableFormComponent } from './table/table-form/table-form.component';
+import { TableListComponent } from './table/table-list/table-list.component';
+import { TableSelectorComponent } from './table/table-selector/table-selector.component';
 
 @Component({
     selector: 'app-root',
@@ -11,12 +20,31 @@ import { TableModule } from './table/table.module';
     styleUrl: './app.component.css',
     imports: [
        RouterOutlet, 
+       CommonModule,
+
        TableModule, 
-       TableFormComponent ],
-    // styleUrls: ['./app.component.css', './header/header.component.css'],
-    // imports: [RouterOutlet, HeaderComponent]
+       HeaderMenuComponent,
+       TableGridComponent
+
+    ],
 
 })
 export class AppComponent {
-  title = 'MyChampagnes';
+  
+  title = 'Angular-Lab';
+
+  menuItemSelected: any;  // variable for selected meny item
+
+  handleMenuItemSelected(menuItem: string): void {
+    
+    this.menuItemSelected=menuItem;
+
+    console.log('AppComponent: menu item clicked =', menuItem);
+
+  };
+
+  handleButtonClick(): void {
+    console.log('Button clicked in AppComponent');
+  }
+
 }

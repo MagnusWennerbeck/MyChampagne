@@ -1,3 +1,5 @@
+<!-- 
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,26 +21,29 @@
                 <li><a href="#">Notes</a></li>
             </ul>
         </nav>
-    </header>
-    <h1>Applications Title = {{title}}</h1>
-    <br>
-    <h2>Detta skrivs ut i app.component.html</h2>
-    <br>
-    <br>
-    <table-form></table-form>
-    <br>
-    <br>
-    <h2>tillbaks till app.component.html</h2>
+    </header> 
+
 
 </body>
 </html>
+-->
+<!-- <body>
+<div>
+    <header-menu (menuItemSelected)="handleMenuItemSelected($event)"></header-menu>
+</div>
+</body> -->
 
 
+<!-- <button (click)="handleButtonClick()">Klicka här</button> -->
+<body>
+
+<!-- <header-menu></header-menu> -->
+
+<header-menu  (menuItemSelected)="handleMenuItemSelected($event)"></header-menu>
 
 
+  <!-- <div >  User selected: {{ menuItemSelected }}   </div> -->
 
+  <table-grid></table-grid>
 
-
-
-    <!-- <app-header></app-header> -->
-
+</body>

@@ -1,18 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableFormComponent } from './table-form/table-form.component'; // Se till att sökvägen är korrekt
 
+import { TableFormComponent } from './table-form/table-form.component'; 
+import { TableGridComponent } from './table-grid/table-grid.component';
+import { TableDataService } from './table-grid/table-data.service';
 
 
 @NgModule({
   declarations: [] ,
   imports: [
     CommonModule,
-    TableFormComponent],
+    TableFormComponent,
+    TableGridComponent
+  ],
   exports: [
     TableFormComponent,
-      // Andra komponenter eller moduler som du vill göra tillgängliga för andra moduler
+    TableGridComponent
     ],
+    providers: [TableDataService], // Inkludera TableDataService här
 
 })
 export class TableModule { }

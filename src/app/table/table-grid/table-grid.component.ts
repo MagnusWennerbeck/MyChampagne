@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableDataService } from './table-data.service';
 
@@ -13,31 +13,25 @@ export class TableGridComponent implements OnInit {
   
   title = "TableGridComponent"
   data: any[] = []; 
-  rowData: any[] = [];
-  columnDefs: any[] = [];
+/*   rowData: any[] = [];
+  columnDefs: any[] = []; */
 
+//  constructor() {}
   constructor(private tableDataService: TableDataService) {}
+
+  @Input() menuItemSelected: string = '';
+
+  ngOnChanges(changes: SimpleChanges): void {
+
+    console.log('table-grid: ngOnChanges() menuItemSelected = ', this.menuItemSelected);
+
+    this.data = this.tableDataService.getDataByMenuSelection(this.menuItemSelected);
+  
+  }
 
   ngOnInit(): void {
 
-    // Hämta data när komponenten initialiseras
-    this.data = this.tableDataService.getData();
-
-    // Lägg till en prenumeration på menyvalet
-    this.tableDataService.menuItemSelected.subscribe((menuItem: string) => {
-      
-      // Hämta data baserat på menyvalet
-      this.rowData = this.tableDataService.getDataByMenuSelection(menuItem);
-
-      console.log(this.rowData);
-      
-      // Uppdatera kolumndefinitioner om nödvändigt
-      this.columnDefs = Object.keys(this.rowData[0]).map((key) => ({
-        headerName: key,
-        field: key,
-      }));
-    });
-
+    console.log("table-grid: OnInit()");
 
   }
 }

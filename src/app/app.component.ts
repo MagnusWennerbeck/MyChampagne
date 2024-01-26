@@ -35,10 +35,11 @@ export class AppComponent {
     
     this.menuItemSelected=menuItem;
 
-    console.log('AppComponent: menu item clicked =', menuItem);
+    console.log('AppComponent: menu item clicked =',this.menuItemSelected);
 
   };
 
+  
   handleButtonClick(): void {
     console.log('Button clicked in AppComponent');
   }

@@ -31,11 +31,11 @@ export class TableDataService {
     console.log("getDataByMenuSelection: " + menuSelection);
     // Implementera logik för att hämta data baserat på menyvalet
     switch (menuSelection) {
-      case 'clicked_Wines':
+      case 'Wines':
         return this.getWinesData();
-      case 'clicked_Producers':
+      case 'Producers':
         return this.getProducersData();
-      case 'clicked_Notes':
+      case 'Notes':
         return this.getNotesData();
       default:
         return [];

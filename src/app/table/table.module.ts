@@ -1,27 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
-// import { TableFormComponent } from './table-form/table-form.component'; 
 import { TableGridComponent } from './table-grid/table-grid.component';
-import { TableDataService } from './table-grid/table-data.service';
-
-import { AgGridModule } from 'ag-grid-angular';
-import { AppComponent } from '../app.component';
+// import { TableDataService } from './table-grid/table-data.service';
+import { MySqlService } from './mysql.service';
 
 @NgModule({
   declarations: [] ,
   imports: [
     CommonModule,
-    // TableFormComponent,
-    TableGridComponent
- 
+    TableGridComponent,
+    HttpClientModule,
+
   ],
   exports: [
-    // TableFormComponent,
-    TableGridComponent,
+      TableGridComponent,
+      HttpClientModule,
     
     ],
-    providers: [TableDataService], // Inkludera TableDataService här
+    // providers: [TableDataService], // Inkludera TableDataService här
+    providers: [MySqlService], // Inkludera tjänst för att producera data
 
 })
 export class TableModule { }

@@ -1,2 +1,4 @@
-@import "~ag-grid-community/styles/ag-grid.css";
-@import "~ag-grid-community/styles/ag-theme-alpine.css";
+/* Uppdatera till den nya versionen av AG-Grid-stilarna */
+@import "https://cdn.jsdelivr.net/npm/ag-grid-community@29.0.0/styles/ag-grid.css";
+@import "https://cdn.jsdelivr.net/npm/ag-grid-community@29.0.0/styles/ag-theme-alpine.css";
+

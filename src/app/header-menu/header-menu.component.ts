@@ -24,7 +24,7 @@ export class HeaderMenuComponent {
  
       this.menuItemSelected.emit(menuItem);
       
-      console.log('HeaderMenuComponent: item selected:', menuItem);
+      // console.log('HeaderMenuComponent: item selected:', menuItem);
 
       //  // Anropa metoden i TableDataService med menyvalet
       //  const data = this.tableDataService.getDataByMenuSelection(menuItem);

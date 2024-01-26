@@ -25,7 +25,7 @@ import { TableGridComponent } from './table/table-grid/table-grid.component';
 })
 export class AppComponent {
   
-  title = 'Angular-Lab';
+  title = 'MyChampagnes';
 
   menuItemSelected: any;  // variable for selected meny item
 
@@ -33,13 +33,13 @@ export class AppComponent {
     
     this.menuItemSelected=menuItem;
 
-    console.log('AppComponent: menu item clicked =',this.menuItemSelected);
+    // console.log('AppComponent: menu item clicked =',this.menuItemSelected);
 
   };
 
   
   handleButtonClick(): void {
-    console.log('Button clicked in AppComponent');
+    // console.log('Button clicked in AppComponent');
   }
 
 }

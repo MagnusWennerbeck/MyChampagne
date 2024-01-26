@@ -1,28 +1,15 @@
-<!-- <p>This text is from {{title}}</p>
-<ul>
-    <li (click)="handleMenuClick('Home')">Home</li>
-    <li (click)="handleMenuClick('About')">About</li>
-    <li (click)="handleMenuClick('Contact')">Contact</li>
-</ul> -->
-
-
-
-  <header>
-    <div class="logo">
-      <img src="./assets/champagne-1.png" alt="Logo">
-      <h1>{{title}}</h1>
-    </div>
-    <nav>
-      <ul>
-        <li><a href="#" (click)="handleMenuClick('clicked_Wines')">Wines</a></li>
-        <li><a href="#" (click)="handleMenuClick('clicked_Producers')">Producers</a></li>
-        <li><a href="#" (click)="handleMenuClick('clicked_Notes')">Notes</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <!-- header-menu.component.html -->
-<!-- <button (click)="handleButtonClick()">Klicka här i HeaderMenuComponent</button> -->
-
-  
-
+<header>
+  <div class="logo">
+    <img src="./assets/champagne-1.png" alt="Logo" />
+    <h1>{{ title }}</h1>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#" (click)="handleMenuClick('clicked_Wines')">Wines</a></li>
+      <li>
+        <a href="#" (click)="handleMenuClick('clicked_Producers')">Producers</a>
+      </li>
+      <li><a href="#" (click)="handleMenuClick('clicked_Notes')">Notes</a></li>
+    </ul>
+  </nav>
+</header>

@@ -2,11 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common'; 
 
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
 import { HeaderMenuComponent } from './header-menu/header-menu.component';
-
 import { TableModule } from './table/table.module';
 import { TableGridComponent } from './table/table-grid/table-grid.component';
 import { TableFormComponent } from './table/table-form/table-form.component';

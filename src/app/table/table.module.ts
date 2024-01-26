@@ -1,21 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TableFormComponent } from './table-form/table-form.component'; 
+// import { TableFormComponent } from './table-form/table-form.component'; 
 import { TableGridComponent } from './table-grid/table-grid.component';
 import { TableDataService } from './table-grid/table-data.service';
 
+import { AgGridModule } from 'ag-grid-angular';
+import { AppComponent } from '../app.component';
 
 @NgModule({
   declarations: [] ,
   imports: [
     CommonModule,
-    TableFormComponent,
+    // TableFormComponent,
     TableGridComponent
+ 
   ],
   exports: [
-    TableFormComponent,
-    TableGridComponent
+    // TableFormComponent,
+    TableGridComponent,
+    
     ],
     providers: [TableDataService], // Inkludera TableDataService här
 

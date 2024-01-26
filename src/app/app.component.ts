@@ -5,9 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderMenuComponent } from './header-menu/header-menu.component';
 import { TableModule } from './table/table.module';
 import { TableGridComponent } from './table/table-grid/table-grid.component';
-import { TableFormComponent } from './table/table-form/table-form.component';
-import { TableListComponent } from './table/table-list/table-list.component';
-import { TableSelectorComponent } from './table/table-selector/table-selector.component';
+
 
 @Component({
     selector: 'app-root',

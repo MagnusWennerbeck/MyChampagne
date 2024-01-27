@@ -1,14 +1,15 @@
-<!-- <h1>{{ title }}</h1>
+<h1>{{ title }}</h1>
 
-<div *ngFor="let item of data">
+<!-- <div *ngFor="let item of data">
   {{ item.id }}, {{ item.name }}, {{ item.description }}
 </div> -->
 
-<!-- table-grid.component.html -->
 <ag-grid-angular
-  style="width: 100%; height: 600px"
+  style="width: 100%; height: 800px"
   class="ag-theme-alpine"
   [rowData]="data"
-  [columnDefs]="columnDefs"
+  [gridOptions]="gridOptions"
   [defaultColDef]="defaultColDef"
+  [columnDefs]="columnDefs"
+  editType="fullRow"
 ></ag-grid-angular>

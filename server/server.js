@@ -37,7 +37,7 @@ function fetchData(query, res) {
 // Endpoint för vinedata
 app.get('/api/Wines', (req, res) => {
     console.log(`server:get() - Wines`);
-    const query = 'SELECT Id, Wine, PN, PM, CH, BoughtWhere FROM Wines';
+    const query = 'SELECT Id, Producer, Wine, PN, PM, CH, IsRose, IsVintage, Vintage, Bought, Consumed, Saldo, PriceEUR, PriceSEK, BoughtWhen, BoughtWhere, Comment, LastUpdated FROM Wines LIMIT 50';
     fetchData(query, res);
 });
 
@@ -51,7 +51,7 @@ app.get('/api/Producers', (req, res) => {
 // Endpoint för notes
 app.get('/api/Notes', (req, res) => {
     console.log(`server:get() - Notes`);
-    const query = 'SELECT Id, Date, Company, TastingNote FROM Notes';
+    const query = 'SELECT Id, Datum, Location, Company, Producer, Wine, TastingNote, Comment, Score, BuyMore, LastUpdated FROM Notes';
     fetchData(query, res);
   });
 

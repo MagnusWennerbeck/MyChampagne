@@ -4,10 +4,11 @@ import {
   OnInit,
   OnChanges,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MySqlService } from '../mysql.service';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { ColDef, createGrid } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { GridOptions } from 'ag-grid-community';
@@ -28,8 +29,9 @@ export class TableGridComponent implements OnInit, OnChanges {
     filter: true,
   };
 
-  // gridOptions: GridOptions | undefined;
-  gridOptions: GridOptions = {};
+  gridOptions: any;
+
+  @ViewChild('agGrid') agGrid: AgGridAngular | undefined;
 
   rowCount: number = 0;
 
@@ -41,7 +43,6 @@ export class TableGridComponent implements OnInit, OnChanges {
 
   // Methods ...............................................................
   ngOnInit(): void {
-    // console.log("table-grid: ngOnInit()");
     this.gridOptions = {
       defaultColDef: {
         editable: true,
@@ -62,19 +63,17 @@ export class TableGridComponent implements OnInit, OnChanges {
   }
   ngAfterViewInit(): void {
     // Förutsättning: gridOptions är redan instansierat och grid är renderat
+    // const gridOptions = this.agGrid.gridOptions;
     this.ensureLastRowVisible();
   }
   ensureLastRowVisible(): void {
-    if (this.gridOptions && this.gridOptions.api) {
-      const lastRowIndex = this.rowCount - 1;
-      // this.gridOptions.api.ensureIndexVisible(lastRowIndex, 'bottom');
-    }
+    // if (this.gridOptions && this.gridOptions.api) {
+    //   const lastRowIndex = this.rowCount - 1;
+    //   // this.gridOptions.api.ensureIndexVisible(lastRowIndex, 'bottom');
+    // }
   }
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log(
-    //   'TableGridComponent:ngOnChanges() menuItemSelected = ' +
-    //     this.menuItemSelected
-    // );
+    console.log('TableGridComponent:ngOnChanges >>> #1 ');
 
     this.updateColumnDefs(this.menuItemSelected);
 
@@ -82,17 +81,25 @@ export class TableGridComponent implements OnInit, OnChanges {
       changes['menuItemSelected'] &&
       !changes['menuItemSelected'].firstChange
     ) {
+      console.log('TableGridComponent:ngOnChanges >>> #2 ');
       this.loadData();
 
       console.log(
         'TableGridComponent:ngOnChanges() rowCount = ',
         this.rowCount
       );
+      console.log('TableGridComponent:ngOnChanges >>> #3 ');
     }
 
     if (changes['formFilterValue']) {
-      const newFilterValue = changes['formFilterValue'].currentValue;
+      // const newFilterValue = changes['formFilterValue'].currentValue;
       this.formFilterValue = changes['formFilterValue'].currentValue;
+      console.log(
+        'TableGridComponent:ngOnChanges >>> #4 ',
+        this.formFilterValue
+      );
+    } else {
+      console.log('TableGridComponent:ngOnChanges >>> #5 - No filter changes ');
     }
     console.log(
       'GridComponent:OnChanges() formFilterValue= ',
@@ -120,17 +127,17 @@ export class TableGridComponent implements OnInit, OnChanges {
       next: (data) => {
         this.data = data;
         // Kontrollera om gridOptions och api är definierade innan du anropar getDisplayedRowCount
-        if (this.gridOptions && this.gridOptions.api) {
-          // Uppdatera antalet rader efter att nya data har laddats
-          // this.rowCount = this.gridOptions.getDisplayedRowCount();
-          console.log(
-            'TableGridComponent:loadData() - successful read from mySql:'
-          );
-          console.log(`Antal rader: ${this.rowCount}`);
+        // if (this.gridOptions && this.gridOptions.api) {
+        //   // Uppdatera antalet rader efter att nya data har laddats
+        //   // this.rowCount = this.gridOptions.getDisplayedRowCount();
+        //   console.log(
+        //     'TableGridComponent:loadData() - successful read from mySql:'
+        //   );
+        //   console.log(`Antal rader: ${this.rowCount}`);
 
-          // Uppdatera titeln här efter att nya data har laddats
-          this.title = this.menuItemSelected + ', rows: ' + this.rowCount;
-        }
+        //   // Uppdatera titeln här efter att nya data har laddats
+        //   this.title = this.menuItemSelected + ', rows: ' + this.rowCount;
+        // }
         console.log(
           'TableGridComponent:loadData() - successful read from mySql:'
         );
@@ -295,10 +302,10 @@ export class TableGridComponent implements OnInit, OnChanges {
 
   scrollToFirstRow() {
     console.log('TableGridComponent: scrollToFirstRow()');
-    if (this.gridOptions) {
-      // this.gridOptions.api.ensureIndexVisible(0, 'top');
-      console.log('TableGridComponent: scrollToFirstRow()  gridOption != null');
-    }
+    // if (this.gridOptions) {
+    //   // this.gridOptions.api.ensureIndexVisible(0, 'top');
+    //   console.log('TableGridComponent: scrollToFirstRow()  gridOption != null');
+    // }
   }
 
   scrollToLastRow() {
@@ -306,9 +313,13 @@ export class TableGridComponent implements OnInit, OnChanges {
     if (this.gridOptions) {
       const lastRowIndex = this.rowCount - 1;
       console.log(
-        'TableGridComponent: scrollToFirstRow()  lastRowIndex=' + lastRowIndex
+        'TableGridComponent:scrollToFirstRow()  gridOption is defined'
       );
       // this.gridOptions.ensureIndexVisible(lastRowIndex, 'bottom');
+    } else {
+      console.log(
+        'TableGridComponent:scrollToFirstRow()  gridOption is NOT defined'
+      );
     }
   }
 }

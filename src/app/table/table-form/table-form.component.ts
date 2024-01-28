@@ -4,6 +4,8 @@ import {
   EventEmitter,
   Input,
   ViewChild,
+  AfterContentInit,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TableGridComponent } from '../table-grid/table-grid.component';
@@ -15,8 +17,15 @@ import { TableGridComponent } from '../table-grid/table-grid.component';
   templateUrl: './table-form.component.html',
   styleUrl: './table-form.component.css',
 })
-export class TableFormComponent {
+export class TableFormComponent implements AfterContentInit {
   title = 'TableFormComponent';
+
+  constructor(private cdRef: ChangeDetectorRef) {}
+
+  ngAfterContentInit() {
+    // Manuell förnyelse av vyen
+    this.cdRef.detectChanges();
+  }
 
   @ViewChild(TableGridComponent) tableGridComponent!: TableGridComponent;
 

@@ -2,8 +2,8 @@ import {
   Component,
   Output,
   EventEmitter,
-  OnChanges,
-  SimpleChanges,
+  Input,
+  ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TableGridComponent } from '../table-grid/table-grid.component';
@@ -18,14 +18,10 @@ import { TableGridComponent } from '../table-grid/table-grid.component';
 export class TableFormComponent {
   title = 'TableFormComponent';
 
+  @ViewChild(TableGridComponent) tableGridComponent!: TableGridComponent;
+
   formFilterValue: string = '';
-  @Output() filterValueChange: EventEmitter<string> = new EventEmitter();
-
-  //  @Output() formFilterValue: EventEmitter<any> = new EventEmitter();
-
-  scrollToFirstRow() {}
-
-  scrollToLastRow() {}
+  @Output() formFilterValueChange: EventEmitter<string> = new EventEmitter();
 
   applyFilter(filterValue: string) {
     if (filterValue !== undefined) {
@@ -36,10 +32,37 @@ export class TableFormComponent {
       );
     } else {
       console.log(
-        'TableFormComponent:applyFilter() formFilterValue= ' + filterValue
+        'TableFormComponent:applyFilter() formFilterValue= undefined '
       );
     }
-    this.filterValueChange.emit(this.formFilterValue);
+    this.formFilterValueChange.emit(this.formFilterValue);
+  }
+
+  ngAfterViewInit() {
+    console.log('ngAfterViewInit() är körd');
+    console.log('TableFormComponent: ngAfterViewInit', this.tableGridComponent);
+  }
+
+  scrollToFirstRow() {
+    if (this.tableGridComponent) {
+      this.tableGridComponent.scrollToFirstRow();
+    } else {
+      console.log(
+        'scrollToFirstRow() tableGridComponent not defined ' +
+          this.tableGridComponent
+      );
+    }
+  }
+
+  scrollToLastRow() {
+    if (this.tableGridComponent) {
+      this.tableGridComponent.scrollToLastRow();
+    } else {
+      console.log(
+        'scrollToLastRow() tableGridComponent not defined ' +
+          this.tableGridComponent
+      );
+    }
   }
 
   printSelectedValues() {}

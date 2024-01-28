@@ -1,3 +1,22 @@
-<h1>{{title}}</h1>
-<p>This text is from {{title}}</p>
+<form>
+  <h3>{{ title }}</h3>
 
+  <div>
+    <button (click)="scrollToFirstRow()">Scrolla till första raden</button>
+    <button (click)="scrollToLastRow()">Scrolla till sista raden</button>
+
+    <button (click)="printSelectedValues()">Skriv ut markerade värden</button>
+
+
+    <input
+      type="text"
+      name="formFilterValue"
+      [ngModel]="formFilterValue"
+      (ngModelChange)="applyFilter($event)"
+      placeholder="Ange sökfilter"
+    />
+
+
+
+  </div>
+</form>

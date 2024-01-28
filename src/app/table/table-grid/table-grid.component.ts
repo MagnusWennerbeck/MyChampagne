@@ -12,8 +12,6 @@ import { MySqlService } from '../mysql.service';
 
 import { AgGridModule } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';
-import { Observable } from 'rxjs';
-
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -24,28 +22,23 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./table-grid.component.css'],
   providers: [DatePipe],
 })
-export class TableGridComponent implements OnInit {
+export class TableGridComponent implements OnInit, OnChanges {
   title = 'TableGridComponent';
-
   data: any[] = [];
-
   columnDefs: any[] = [];
-
   defaultColDef: ColDef = {
     filter: true,
   };
-
   gridOptions: any;
-
   rowCount: number = 0;
 
   // Constructor ..............................................................
-  //  constructor() {}
-  // constructor(private tableDataService: TableDataService) {
-  // constructor(private mysqlService: MySqlService, private tableDataService: TableDataService) {
   constructor(private mysqlService: MySqlService, private datePipe: DatePipe) {}
 
   @Input() menuItemSelected: string = '';
+  @Input() formFilterValue: string = '';
+
+  receivedFilterValue: string = '';
 
   // Methods ...............................................................
   ngOnInit(): void {
@@ -62,8 +55,45 @@ export class TableGridComponent implements OnInit {
     };
 
     this.menuItemSelected = 'Wines';
+    console.log('tableGridComponent:ngOnInit() #1');
     this.updateColumnDefs(this.menuItemSelected);
+    console.log('tableGridComponent:ngOnInit() #2');
     this.loadData();
+    console.log('tableGridComponent:ngOnInit() #3');
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(
+      'TableGridComponent:ngOnChanges() menuItemSelected = ' +
+        this.menuItemSelected
+    );
+
+    this.updateColumnDefs(this.menuItemSelected);
+
+    if (
+      changes['menuItemSelected'] &&
+      !changes['menuItemSelected'].firstChange
+    ) {
+      this.loadData();
+
+      console.log(
+        'TableGridComponent:ngOnChanges() rowCount = ',
+        this.rowCount
+      );
+    }
+
+    console.log(
+      'GridComponent:OnChanges() Received filter value:',
+      this.receivedFilterValue
+    );
+      
+    if (changes['formFilterValue']) {
+      console.log(
+        'GridComponent:OnChanges() Received filter value:',
+        this.receivedFilterValue
+      );
+      this.receivedFilterValue = changes['formFilterValue'].currentValue;
+    }
   }
 
   onFirstDataRendered(params: any) {
@@ -75,39 +105,24 @@ export class TableGridComponent implements OnInit {
     this.rowCount = params.api.getDisplayedRowCount();
     console.log('onGridReady() Grid is ready!');
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    // console.log('TableGridComponent:ngOnChanges() menuItemSelected = ', this.menuItemSelected);
-
-    this.updateColumnDefs(this.menuItemSelected);
-
-    if (
-      changes['menuItemSelected'] &&
-      !changes['menuItemSelected'].firstChange
-    ) {
-      this.loadData();
-      
-        // Uppdatera antalet rader efter att nya data har laddats
-        // this.rowCount = this.gridOptions.api.getDisplayedRowCount();
-        
-    };
-
-  }
 
   private loadData(): void {
     // console.log("TableGridComponent:loadData() - enter");
     this.mysqlService.getDataByMenuSelection(this.menuItemSelected).subscribe({
       next: (data) => {
         this.data = data;
-      // Kontrollera om gridOptions och api är definierade innan du anropar getDisplayedRowCount
-      if (this.gridOptions && this.gridOptions.api) {
-        // Uppdatera antalet rader efter att nya data har laddats
-        this.rowCount = this.gridOptions.api.getDisplayedRowCount();
-        console.log('TableGridComponent:loadData() - successful read from mySql:');
-        console.log(`Antal rader: ${this.rowCount}`);
-  
-        // Uppdatera titeln här efter att nya data har laddats
-        this.title = this.menuItemSelected + ', rows: ' + this.rowCount;
-      }
+        // Kontrollera om gridOptions och api är definierade innan du anropar getDisplayedRowCount
+        if (this.gridOptions && this.gridOptions.api) {
+          // Uppdatera antalet rader efter att nya data har laddats
+          this.rowCount = this.gridOptions.api.getDisplayedRowCount();
+          console.log(
+            'TableGridComponent:loadData() - successful read from mySql:'
+          );
+          console.log(`Antal rader: ${this.rowCount}`);
+
+          // Uppdatera titeln här efter att nya data har laddats
+          this.title = this.menuItemSelected + ', rows: ' + this.rowCount;
+        }
         console.log(
           'TableGridComponent:loadData() - successful read from mySql:'
         );
@@ -183,8 +198,8 @@ export class TableGridComponent implements OnInit {
               // Formatera talet med 2 decimaler
               return params.value ? params.value.toFixed(2) : '';
             },
-
-          },          {
+          },
+          {
             headerName: 'PriceSEK',
             field: 'PriceSEK',
             width: 150,
@@ -192,7 +207,6 @@ export class TableGridComponent implements OnInit {
               // Formatera talet med 2 decimaler
               return params.value ? params.value.toFixed(2) : '';
             },
-
           },
           {
             headerName: 'BoughtWhen',
@@ -261,13 +275,13 @@ export class TableGridComponent implements OnInit {
             },
             width: 125,
           },
-          { headerName: 'Location', field: 'Location', width: 125  },
-          { headerName: 'Company', field: 'Company', width: 125  },
-          { headerName: 'Producer', field: 'Producer', width: 200  },
-          { headerName: 'Wine', field: 'Wine', width: 250  },
-          { headerName: 'TastingNote', field: 'TastingNote', width: 500  },
-          { headerName: 'Score', field: 'Score', width: 100  },
-          { headerName: 'Comment', field: 'Comment', width: 300  },
+          { headerName: 'Location', field: 'Location', width: 125 },
+          { headerName: 'Company', field: 'Company', width: 125 },
+          { headerName: 'Producer', field: 'Producer', width: 200 },
+          { headerName: 'Wine', field: 'Wine', width: 250 },
+          { headerName: 'TastingNote', field: 'TastingNote', width: 500 },
+          { headerName: 'Score', field: 'Score', width: 100 },
+          { headerName: 'Comment', field: 'Comment', width: 300 },
           // { headerName: 'BuyMore', field: 'BuyMore', width: 100  },
           // { headerName: 'LastUpdated', field: 'LastUpdated', width: 250  },
           {

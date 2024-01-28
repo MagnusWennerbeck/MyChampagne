@@ -4,5 +4,13 @@
     (menuItemSelected)="handleMenuItemSelected($event)"
   ></header-menu>
 
-  <table-grid [menuItemSelected]="menuItemSelected"></table-grid>
+  <table-form
+    [formFilterValue]="formFilterValue"
+    (filterValueChange)="handleFormFilterChange($event)"
+  ></table-form>
+
+  <table-grid
+    [menuItemSelected]="menuItemSelected"
+    [formFilterValue]="formFilterValue"
+  ></table-grid>
 </body>

@@ -20,18 +20,31 @@ import { TableGridComponent } from '../table-grid/table-grid.component';
 export class TableFormComponent implements AfterContentInit {
   title = 'TableFormComponent';
 
-  constructor(private cdRef: ChangeDetectorRef) {}
-
-  ngAfterContentInit() {
-    // Manuell förnyelse av vyen
-    this.cdRef.detectChanges();
-  }
-
   @ViewChild(TableGridComponent) tableGridComponent!: TableGridComponent;
 
   formFilterValue: string = '';
   @Output() formFilterValueChange: EventEmitter<string> = new EventEmitter();
 
+  // formScrollValue: number = 0;
+  // @Output() formScrollValueChange: EventEmitter<number> = new EventEmitter();
+
+  @Output() scrollToFirstRowEvent = new EventEmitter<void>();
+  @Output() scrollToLastRowEvent = new EventEmitter<void>();
+ 
+  // scrollToFirstRow() {
+  //   this.scrollToFirstRowEvent.emit();
+  // }
+
+  // scrollToLastRow() {
+  //   this.scrollToLastRowEvent.emit();
+  // }
+  constructor(private cdRef: ChangeDetectorRef) {}
+
+  rowCount: number = 25;
+  ngAfterContentInit() {
+    // Manuell förnyelse av vyen
+    this.cdRef.detectChanges();
+  }
   applyFilter(filterValue: string) {
     if (filterValue !== undefined) {
       this.formFilterValue = filterValue;
@@ -48,27 +61,41 @@ export class TableFormComponent implements AfterContentInit {
   }
 
   ngAfterViewInit() {
-    console.log('ngAfterViewInit() är körd');
-    console.log('TableFormComponent: ngAfterViewInit', this.tableGridComponent);
+    if (this.tableGridComponent) {
+      this.tableGridComponent.scrollToFirstRow();
+      console.log('TableFormComponent:ngAfterViewInit() >>>>> FOUND');
+    } else {
+      console.log('TableFormComponent:ngAfterViewInit() >>>>> NOT FOUND');
+    }
   }
 
   scrollToFirstRow() {
+    this.scrollToFirstRowEvent.emit();
+
+    // this.formScrollValue=1;
+    // this.formScrollValueChange.emit(this.formScrollValue);
+
     if (this.tableGridComponent) {
       this.tableGridComponent.scrollToFirstRow();
     } else {
       console.log(
-        'scrollToFirstRow() tableGridComponent not defined ' +
+        'TableFormComponent:scrollToFirstRow() tableGridComponent ### not defined ' +
           this.tableGridComponent
       );
     }
   }
 
   scrollToLastRow() {
+    this.scrollToLastRowEvent.emit();
+
+    // this.formScrollValue=this.rowCount;
+    // this.formScrollValueChange.emit(this.formScrollValue);
+
     if (this.tableGridComponent) {
       this.tableGridComponent.scrollToLastRow();
     } else {
       console.log(
-        'scrollToLastRow() tableGridComponent not defined ' +
+        'TableFormComponent:scrollToLastRow() tableGridComponent ### not defined ' +
           this.tableGridComponent
       );
     }

@@ -6,6 +6,8 @@
 
   <table-form
     (formFilterValueChange)="handleFormFilterChange($event)"
+    (scrollToFirstRowEvent)="handleScrollToFirstRow()"
+    (scrollToLastRowEvent)="handleScrollToLastRow()"
   ></table-form>
 
   <table-grid

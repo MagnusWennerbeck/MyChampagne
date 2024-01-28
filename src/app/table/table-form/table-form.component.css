@@ -1,9 +1,23 @@
 form {
+    /* position: fixed; */
     background-color: #9b9494;
     color: #222020f8;
-    padding: 5px;
+    padding: 10px;
     display: flex;
     flex-direction: column; /* Lägg till för att ändra layout till kolumn */
     align-items: left; /* Centrera innehållet vertikalt */
     border-bottom: 1px solid black;
+  }
+
+  .button-group {
+    margin-top: 10px; /* Ange önskat mellanrum över knapparna */
+    margin-bottom: 10px; /* Ange önskat mellanrum över knapparna */
+  }
+
+  .button-group button {
+    margin-right: 10px; /* Ange önskat mellanrum mellan knapparna */
+  }
+
+  .button-group input {
+    margin-left: auto; /* Gör textrutan högerjusterad genom att använda margin-left: auto */
   }

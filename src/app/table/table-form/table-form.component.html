@@ -1,12 +1,9 @@
 <form>
-  <h3>{{ title }}</h3>
+  <!-- <h3>{{ title }}</h3> -->
 
-  <div>
-    <button (click)="scrollToFirstRow()">Scrolla till första raden</button>
-    <button (click)="scrollToLastRow()">Scrolla till sista raden</button>
-
-    <button (click)="printSelectedValues()">Skriv ut markerade värden</button>
-
+  <div class="button-group">
+    <button (click)="scrollToFirstRow()">I<<<</button>
+    <button (click)="scrollToLastRow()">>>>I</button>
 
     <input
       type="text"
@@ -16,7 +13,7 @@
       placeholder="Ange sökfilter"
     />
 
-
-
   </div>
+
+  <div>Antal rader: {{ rowCount }}</div>
 </form>

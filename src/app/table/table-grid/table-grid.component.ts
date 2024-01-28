@@ -12,17 +12,18 @@ import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { ColDef, createGrid } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { GridOptions } from 'ag-grid-community';
+import { TableFormComponent } from '../table-form/table-form.component';
 
 @Component({
   selector: 'table-grid',
   standalone: true,
-  imports: [CommonModule, AgGridModule],
+  imports: [CommonModule, AgGridModule, TableFormComponent],
   templateUrl: './table-grid.component.html',
   styleUrls: ['./table-grid.component.css'],
   providers: [DatePipe],
 })
 export class TableGridComponent implements OnInit, OnChanges {
-  title = 'TableGridComponent';
+  title = 'TableGridComponent2';
   data: any[] = [];
   columnDefs: any[] = [];
   defaultColDef: ColDef = {
@@ -31,7 +32,7 @@ export class TableGridComponent implements OnInit, OnChanges {
 
   gridOptions: any;
 
-  @ViewChild('agGrid') agGrid: AgGridAngular | undefined;
+  @ViewChild('myGrid') grid!: AgGridAngular;
 
   rowCount: number = 0;
 
@@ -40,6 +41,24 @@ export class TableGridComponent implements OnInit, OnChanges {
 
   @Input() menuItemSelected: string = '';
   @Input() formFilterValue: string = '';
+
+  // onScrollToFirstRow() {
+  //   // Åtgärder vid knapptryck för "I<<<"
+  //   this.scrollToFirstRow();
+  // }
+
+  // onScrollToLastRow() {
+  //   // Åtgärder vid knapptryck för ">>>I"
+  //   this.scrollToLastRow();
+  // }
+
+  // scrollToFirstRow() {
+  //   // Implementera scrollfunktion för första raden
+  // }
+
+  // scrollToLastRow() {
+  //   // Implementera scrollfunktion för sista raden
+  // }
 
   // Methods ...............................................................
   ngOnInit(): void {
@@ -98,6 +117,7 @@ export class TableGridComponent implements OnInit, OnChanges {
         'TableGridComponent:ngOnChanges >>> #4 ',
         this.formFilterValue
       );
+      this.scrollToLastRow();
     } else {
       console.log('TableGridComponent:ngOnChanges >>> #5 - No filter changes ');
     }
@@ -105,8 +125,6 @@ export class TableGridComponent implements OnInit, OnChanges {
       'GridComponent:OnChanges() formFilterValue= ',
       this.formFilterValue
     );
-
-    this.scrollToLastRow(); // eller andra ngAfterViewInit-relaterade operationer
 
     console.log('GridComponent:OnChanges() scrollToLastRow() klar ');
   }
@@ -300,25 +318,44 @@ export class TableGridComponent implements OnInit, OnChanges {
     }
   }
 
-  scrollToFirstRow() {
-    console.log('TableGridComponent: scrollToFirstRow()');
-    // if (this.gridOptions) {
-    //   // this.gridOptions.api.ensureIndexVisible(0, 'top');
-    //   console.log('TableGridComponent: scrollToFirstRow()  gridOption != null');
-    // }
+  handleScrollToFirstRow() {
+    console.log('TableGridComponent: onScrollToFirstRow() >>>> #1');
+    this.scrollToFirstRow(); // Kontrollera att denna funktion anropas
   }
 
-  scrollToLastRow() {
+  handleScrollToLastRow() {
+    console.log('TableGridComponent: onScrollToLastRow() >>>> #2');
+    this.scrollToLastRow(); // Kontrollera att denna funktion anropas
+  }
+
+  scrollToFirstRow() {
     console.log('TableGridComponent: scrollToFirstRow()');
     if (this.gridOptions) {
-      const lastRowIndex = this.rowCount - 1;
+      const lastRowIndex = 1;
+      this.grid.api.ensureIndexVisible(lastRowIndex, 'bottom');
       console.log(
-        'TableGridComponent:scrollToFirstRow()  gridOption is defined'
+        'TableGridComponent:scrollToFirstRow()  gridOption is defined lastRowIndex= ',
+        lastRowIndex
       );
-      // this.gridOptions.ensureIndexVisible(lastRowIndex, 'bottom');
     } else {
       console.log(
         'TableGridComponent:scrollToFirstRow()  gridOption is NOT defined'
+      );
+    }
+  }
+
+  scrollToLastRow() {
+    console.log('TableGridComponent: scrollToLastRow() started)');
+    if (this.gridOptions) {
+      const lastRowIndex = this.rowCount - 1;
+      this.grid.api.ensureIndexVisible(lastRowIndex, 'bottom');
+      console.log(
+        'TableGridComponent:scrollToLastRow()  gridOption is defined lastRowIndex= ',
+        lastRowIndex
+      );
+    } else {
+      console.log(
+        'TableGridComponent:scrollToLastRow()  gridOption is NOT defined'
       );
     }
   }

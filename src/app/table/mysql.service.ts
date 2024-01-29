@@ -12,38 +12,23 @@ export class MySqlService {
   private rowCountSubject = new BehaviorSubject<number>(0);
   rowCount$ = this.rowCountSubject.asObservable();
 
-  constructor(private http: HttpClient) {
-    // this.getDataByMenuSelection('Wines');
-  }
-
+  constructor(private http: HttpClient) {}
 
   // Methods ......................................................................
 
   getDataByMenuSelection(menuSelection: string): Observable<any[]> {
     const url = this.apiUrl + menuSelection;
     console.log('mySqlService:getDataByMenuSelection() ', url);
-     return this.http.get<any[]>(url);
-
-    // return this.http.get<any[]>(url).subscribe((data) => {
-    //   this.rowCountSubject.next(data.rowCount);
-    // });
+    return this.http.get<any[]>(url);
   }
 
-  // private getWinesData(): Observable<any[]> {
-  //   const url = this.apiUrl + 'wines';
-  //   console.log("MySqlService:getWinesData()", url);
-  //   return this.http.get<any[]>(url);
-  // }
+  updateDatabase(
+    id: string,
+    columnHeader: string,
+    value: string
+  ): Observable<any[]> {
+    const updateUrl = `http://localhost:3000/api/Wines/updateCell/${wineId}`;
 
-  // private getProducersData(): Observable<any[]> {
-  //   const url = this.apiUrl + 'producers';
-  //   console.log("MySqlService:getProducersData()");
-  //   return this.http.get<any[]>(url);
-  // }
-
-  // private getNotesData(): Observable<any[]> {
-  //   const url = this.apiUrl + 'notes';
-  //   console.log("MySqlService:getNotesData()");
-  //   return this.http.get<any[]>(url);
-  // }
+    return this.http.put(updateUrl, { columnName, newValue });
+  }
 }

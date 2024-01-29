@@ -9,6 +9,19 @@ export class TableDataService {
   
   menuItemSelected: any;
 
+  getDataByMenuSelection(menuSelection: string): any[] {
+    console.log("getDataByMenuSelection: " + menuSelection);
+    switch (menuSelection) {
+      case 'Wines':
+        return this.getWinesData();
+      case 'Producers':
+        return this.getProducersData();
+      case 'Notes':
+        return this.getNotesData();
+      default:
+        return [];
+    }
+  }
   getData() {
     // Hämta och returnera din data här
     console.log("getData()");
@@ -27,21 +40,6 @@ export class TableDataService {
     ];
   }
     
-  getDataByMenuSelection(menuSelection: string): any[] {
-    console.log("getDataByMenuSelection: " + menuSelection);
-    // Implementera logik för att hämta data baserat på menyvalet
-    switch (menuSelection) {
-      case 'Wines':
-        return this.getWinesData();
-      case 'Producers':
-        return this.getProducersData();
-      case 'Notes':
-        return this.getNotesData();
-      default:
-        return [];
-    }
-  }
-
   private getWinesData(): any[] {
     console.log("getWinesData()");
     // Implementera logik för att hämta vindedata

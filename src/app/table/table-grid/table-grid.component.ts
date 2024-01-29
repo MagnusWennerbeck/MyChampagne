@@ -128,6 +128,8 @@ export class TableGridComponent implements OnInit, OnChanges {
     }
   }
 
+  // Event Listenernes ==========================================================
+
   ngOnChanges(changes: SimpleChanges): void {
     console.log('TableGridComponent:ngOnChanges()  >>> START ');
 
@@ -184,6 +186,34 @@ export class TableGridComponent implements OnInit, OnChanges {
     );
   }
 
+  onCellValueChanged(event: any) {
+    const rowIndex = event.rowIndex;
+    const columnHeader = event.column.getId();
+    const newCellValue = event.newValue;
+    const rowData = event.node.data;
+    const rowId = rowData.Id;
+
+    console.log(
+      'columnHeader=',
+      columnHeader,
+      'rowIndex=',
+      rowIndex,
+      'rowId=',
+      rowId,
+      'newCellValue=',
+      newCellValue
+    );
+
+    // Uppdatera databasen
+    this.updateDatabase(rowId, columnHeader, newCellValue);
+  }
+
+  updateDatabase(id: number, columnName: string, newValue: any) {
+
+    this.mysqlService.updateDatabase(id, columnName, newValue).subscribe(response => {});
+  }
+
+  // loadData .................................................................
   private loadData(): void {
     console.log('TableGridComponent:loadData() - >>> START');
 

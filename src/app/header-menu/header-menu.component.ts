@@ -1,7 +1,4 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-
-// import { TableModule } from '../table/table.module';
-// import { TableGridComponent } from '../table/table-grid/table-grid.component';
 import { TableDataService } from '../table/table-grid/table-data.service';
 
 @Component({
@@ -15,7 +12,9 @@ export class HeaderMenuComponent {
 
   @Output() menuItemSelected: EventEmitter<any> = new EventEmitter();
 
-  constructor(private tableDataService: TableDataService) {} // Injicera TableDataService här
+  constructor(private tableDataService: TableDataService) {
+    console.log('HeaderMenuComponent:constructor() has started...');
+  } // Injicera TableDataService här
 
   handleMenuClick(menuItem: string): void {
     this.menuItemSelected.emit(menuItem);

@@ -2,3 +2,77 @@
 @import "https://cdn.jsdelivr.net/npm/ag-grid-community@29.0.0/styles/ag-grid.css";
 @import "https://cdn.jsdelivr.net/npm/ag-grid-community@29.0.0/styles/ag-theme-alpine.css";
 
+  /* AG Grid */
+.header-center {
+    text-align: center;
+    padding-left:0;
+    padding-right:0;
+  }
+  .header-left {
+    text-align: left;
+    padding-left:0;
+    padding-right:0;
+  }
+  .header-right {
+    text-align: right;
+    padding-left:0;
+    padding-right:0;
+  }
+
+  /* Top-bar */
+  /* Design: knapparna ligger överst med en lagom avstånd både uppåt och nedåt */
+  /* Alla texter som ska skrivas ut hamnar på raden under, på lagom avstånd från nedre kanten  */
+
+
+  #top-bar {
+    background-color: #b2c0ee;
+    padding: 10px 25px;
+    border-bottom: 1px solid #353434;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Centrera elementen vertikalt */
+  }
+
+  .bottom-row {
+    display: flex;
+    justify-content: space-evenly; /* Knappar hamnar i kanterna på översta raden, texter sprids ut över hela raden på den nedre */
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Centrera elementen vertikalt */
+  }
+
+  #top-bar button {
+    height: 30px;  /* höjd för knapparna */
+    margin: 10px 5px;  /*  marginal mellan knapparna - första är höjd, andra är bredd */
+  }
+  .top-bar-text {
+    margin: 0; /* Återställ standardmarginalen */
+    padding: 0px 5px;  /* första är höjd, andra är bredd - */
+    line-height: 1; /* Återställ standard line-height för att undvika överflödigt utrymme */
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .button-group {
+    display: flex;
+    align-items: center; /* Centrera knapparna vertikalt */
+  }
+  
+  .text-group {
+    display: flex;
+    justify-content: space-between; /* Texterna utspridda */
+    align-items: center; /* Centrera texterna vertikalt */
+  }
+
+  .input-text {
+    padding-right: 25;
+    margin-right: 25;
+  }

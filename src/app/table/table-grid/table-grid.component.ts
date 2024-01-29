@@ -1,6 +1,7 @@
 import {
   Component,
   Input,
+  NgModule,
   OnInit,
   OnChanges,
   SimpleChanges,
@@ -12,12 +13,13 @@ import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { ColDef, createGrid } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { GridOptions } from 'ag-grid-community';
-import { TableFormComponent } from '../table-form/table-form.component';
+// import { TableFormComponent } from '../table-form/table-form.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'table-grid',
   standalone: true,
-  imports: [CommonModule, AgGridModule, TableFormComponent],
+  imports: [CommonModule, AgGridModule, FormsModule],
   templateUrl: './table-grid.component.html',
   styleUrls: ['./table-grid.component.css'],
   providers: [DatePipe],
@@ -28,47 +30,77 @@ export class TableGridComponent implements OnInit, OnChanges {
   columnDefs: any[] = [];
   defaultColDef: ColDef = {
     filter: true,
+    cellStyle: {
+      'padding-left': '15px',
+      'padding-rigth': '0px',
+      textAlign: 'left',
+    },
+    headerClass: 'header-left',
+    editable: true,
   };
 
-  gridOptions: any;
-
   @ViewChild('myGrid') grid!: AgGridAngular;
+  @ViewChild('quickFilter') filter!: AgGridAngular;
+  @Input() menuItemSelected: string = ''; // input from HeadermenyComponent, triggered when user changes menu item
+  @Input() formFilterValue: string = ''; // old solution with TableFormComonent - not used anymore
 
+  gridOptions: any;
   rowCount: number = 0;
+  quickFilter: string | undefined;
 
   // Constructor ..............................................................
-  constructor(private mysqlService: MySqlService, private datePipe: DatePipe) {}
+  constructor(private mysqlService: MySqlService, private datePipe: DatePipe) {
+    console.log('TableGridComponent:constructor() has started...');
+  }
 
-  @Input() menuItemSelected: string = '';
-  @Input() formFilterValue: string = '';
+  // Utility methods ...........................................................
+  private getRowCount() {
+    this.rowCount = this.grid.api.getDisplayedRowCount();
+    // console.log('TableGridComponent:getRowCount()  rowCount=', this.rowCount);
+  }
 
-  // onScrollToFirstRow() {
-  //   // Åtgärder vid knapptryck för "I<<<"
-  //   this.scrollToFirstRow();
-  // }
+  applyQuickFilter(filterValue: string) {
+    this.grid.api.setGridOption('quickFilterText', filterValue);
+    console.log(
+      'TableGridComponent:this.applyFilter()  filterValue=  ',
+      filterValue
+    );
+  }
+  onQuickFilterChange(filterValue: string) {
+    console.log(
+      'TableGridComponent:onQuickFilterChange Quick filter changed: ',
+      filterValue
+    );
+    this.applyQuickFilter(filterValue);
+  }
+  clearFilter() {
+    this.grid.api.setGridOption('quickFilterText', '');
+    this.quickFilter = '';
+    console.log(
+      'TableGridComponent:clearFilter() quickFilter= ',
+      this.quickFilter
+    );
+  }
 
-  // onScrollToLastRow() {
-  //   // Åtgärder vid knapptryck för ">>>I"
-  //   this.scrollToLastRow();
-  // }
+  countSaldo() {
+    console.log('TableGridComponent:countSaldo() calling onGridReady()');
+    this.onGridReady(null);
+  }
 
-  // scrollToFirstRow() {
-  //   // Implementera scrollfunktion för första raden
-  // }
-
-  // scrollToLastRow() {
-  //   // Implementera scrollfunktion för sista raden
-  // }
+  // AG grid methods ...........................................................
 
   // Methods ...............................................................
   ngOnInit(): void {
+    console.log('TableGridComponent:ngOnInit() >>> START');
     this.gridOptions = {
       defaultColDef: {
         editable: true,
       },
+      rowHeight: 25,
 
-      onFirstDataRendered: this.onFirstDataRendered.bind(this),
-      onGridReady: this.onGridReady.bind(this),
+      // onRowDataUpdated: this.onLoadedData.bind(this),
+      // onFirstDataRendered: this.onFirstDataRendered.bind(this),
+      // onGridReady: this.onGridReady.bind(this),
 
       suppressHorizontalScroll: true,
     };
@@ -76,89 +108,88 @@ export class TableGridComponent implements OnInit, OnChanges {
     this.menuItemSelected = 'Wines';
     this.updateColumnDefs(this.menuItemSelected);
     this.loadData();
-
-    // this.scrollToFirstRow(); // eller andra ngAfterViewInit-relaterade operationer
-    // this.scrollToLastRow(); // eller andra ngAfterViewInit-relaterade operationer
+    console.log('TableGridComponent:ngOnInit() >>> END');
   }
+
   ngAfterViewInit(): void {
+    console.log('TableGridComponent:ngAfterViewInit()');
     // Förutsättning: gridOptions är redan instansierat och grid är renderat
-    // const gridOptions = this.agGrid.gridOptions;
-    this.ensureLastRowVisible();
+    // this.ensureLastRowVisible();
   }
-  ensureLastRowVisible(): void {
-    // if (this.gridOptions && this.gridOptions.api) {
-    //   const lastRowIndex = this.rowCount - 1;
-    //   // this.gridOptions.api.ensureIndexVisible(lastRowIndex, 'bottom');
-    // }
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('TableGridComponent:ngOnChanges >>> #1 ');
 
-    this.updateColumnDefs(this.menuItemSelected);
+  ensureLastRowVisible(): void {
+    console.log('TableGridComponent:ensureLastRowVisible() #1');
+    if (this.gridOptions && this.gridOptions.api) {
+      const lastRowIndex = this.rowCount - 1;
+      console.log(
+        'TableGridComponent:ensureLastRowVisible() #2 lastRowIndex= '
+      ),
+        lastRowIndex;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('TableGridComponent:ngOnChanges()  >>> START ');
 
     if (
       changes['menuItemSelected'] &&
       !changes['menuItemSelected'].firstChange
     ) {
-      console.log('TableGridComponent:ngOnChanges >>> #2 ');
+      console.log(
+        'TableGridComponent:ngOnChanges()  >>> MenuSelectionChanged ',
+        this.menuItemSelected
+      );
+      this.updateColumnDefs(this.menuItemSelected);
       this.loadData();
-
-      console.log(
-        'TableGridComponent:ngOnChanges() rowCount = ',
-        this.rowCount
-      );
-      console.log('TableGridComponent:ngOnChanges >>> #3 ');
     }
 
-    if (changes['formFilterValue']) {
-      // const newFilterValue = changes['formFilterValue'].currentValue;
-      this.formFilterValue = changes['formFilterValue'].currentValue;
+    if (changes['quickFilter']) {
+      this.quickFilter = changes['quickFilter'].currentValue;
+      // this.applyQuickFilter(this.quickFilter)
       console.log(
-        'TableGridComponent:ngOnChanges >>> #4 ',
-        this.formFilterValue
+        'TableGridComponent:ngOnChanges >>> formFilterValue was changed ',
+        this.quickFilter
       );
-      this.scrollToLastRow();
-    } else {
-      console.log('TableGridComponent:ngOnChanges >>> #5 - No filter changes ');
     }
-    console.log(
-      'GridComponent:OnChanges() formFilterValue= ',
-      this.formFilterValue
-    );
 
-    console.log('GridComponent:OnChanges() scrollToLastRow() klar ');
-  }
-
-  onFirstDataRendered(params: any) {
-    this.rowCount = params.api.getDisplayedRowCount();
-    console.log(`onFirstDataRendered() Antal rader: ${this.rowCount}`);
+    console.log('TableGridComponent:ngOnChanges()  >>> END ');
   }
 
   onGridReady(params: any) {
-    this.rowCount = params.api.getDisplayedRowCount();
-    console.log('onGridReady() Grid is ready!');
+    this.getRowCount();
+    console.log('TableGridComponent:onGridReady()  rowCount=', this.rowCount);
+  }
+
+  onRowDataChanged(params: any) {
+    this.getRowCount();
+    console.log(
+      'TableGridComponent:onRowDataChanged()  rowCount=',
+      this.rowCount
+    );
+  }
+
+  onFirstDataRendered(params: any) {
+    this.getRowCount();
+    console.log(
+      'TableGridComponent:onFirstDataRendered()  rowCount=',
+      this.rowCount
+    );
+  }
+
+  onStateUpdated(params: any) {
+    this.getRowCount();
+    console.log(
+      'TableGridComponent:onStateUpdated()  rowCount=',
+      this.rowCount
+    );
   }
 
   private loadData(): void {
-    // console.log("TableGridComponent:loadData() - enter");
+    console.log('TableGridComponent:loadData() - >>> START');
+
     this.mysqlService.getDataByMenuSelection(this.menuItemSelected).subscribe({
       next: (data) => {
         this.data = data;
-        // Kontrollera om gridOptions och api är definierade innan du anropar getDisplayedRowCount
-        // if (this.gridOptions && this.gridOptions.api) {
-        //   // Uppdatera antalet rader efter att nya data har laddats
-        //   // this.rowCount = this.gridOptions.getDisplayedRowCount();
-        //   console.log(
-        //     'TableGridComponent:loadData() - successful read from mySql:'
-        //   );
-        //   console.log(`Antal rader: ${this.rowCount}`);
-
-        //   // Uppdatera titeln här efter att nya data har laddats
-        //   this.title = this.menuItemSelected + ', rows: ' + this.rowCount;
-        // }
-        console.log(
-          'TableGridComponent:loadData() - successful read from mySql:'
-        );
       },
       error: (error) => {
         console.error('Error fetching data:', error);
@@ -168,11 +199,11 @@ export class TableGridComponent implements OnInit, OnChanges {
       },
     });
 
-    this.title = this.menuItemSelected + ', rows: ' + this.rowCount;
+    console.log('TableGridComponent:loadData() - >>> END');
   }
 
-  private setColumnDefs(): void {
-    // Definiera dina kolumndefinitioner baserat på datan (OBS! ingen bra metod)
+  private setColumnDefsBasedOnData(): void {
+    // This is not used for now, but maybe in the future.
     if (this.data.length > 0) {
       const firstRow = this.data[0];
       this.columnDefs = Object.keys(firstRow).map((key) => ({
@@ -181,45 +212,97 @@ export class TableGridComponent implements OnInit, OnChanges {
       }));
     }
   }
-  // Metod för att dynamiskt uppdatera kolumndefinitioner baserat på menyval
-  private updateColumnDefs(menuSelection: string): void {
-    // console.log("menuSelection="+menuSelection);
 
+  private updateColumnDefs(menuSelection: string): void {
     switch (menuSelection) {
       case 'Wines':
         this.columnDefs = [
           { headerName: 'Id', field: 'Id', editable: false, width: 75 },
-
-          // { headerName: 'ProdId', field: 'ProdId', width: 100 },
-          { headerName: 'Producer', field: 'Producer', width: 150 },
-
+          { headerName: 'Producer', field: 'Producer', width: 200 },
           { headerName: 'Wine', field: 'Wine', width: 200 },
-
-          { headerName: 'PN', field: 'PN', width: 75 },
-          { headerName: 'PM', field: 'PM', width: 75 },
-          { headerName: 'CH', field: 'CH', width: 75 },
-
-          { headerName: 'Bought', field: 'Bought', width: 100 },
-          { headerName: 'Consumed', field: 'Consumed', width: 125 },
-          { headerName: 'Saldo', field: 'Saldo', width: 100 },
-
-          // { headerName: 'PriceEUR', field: 'PriceEUR', width: 125 },
-          // { headerName: 'PriceSEK', field: 'PriceSEK', width: 125 },
+          {
+            headerName: 'PN',
+            field: 'PN',
+            width: 75,
+            filter: 'agNumberColumnFilter',
+          },
+          {
+            headerName: 'PM',
+            field: 'PM',
+            width: 75,
+            filter: 'agNumberColumnFilter',
+          },
+          {
+            headerName: 'CH',
+            field: 'CH',
+            width: 75,
+            filter: 'agNumberColumnFilter',
+          },
+          {
+            headerName: 'IsRose',
+            field: 'IsRose',
+            width: 100,
+            // checkboxSelection: true,
+            cellRenderer: function (params: { value: number }) {
+              return params.value === 1
+                ? '<input type="checkbox" checked/>'
+                : '<input type="checkbox"/>';
+            },
+          },
+          // {
+          //   headerName: 'IsVintage',
+          //   field: 'IsVintage',
+          //   width: 75,
+          //   // checkboxSelection: true,
+          //   cellRenderer: function (params: { value: number }) {
+          //     return params.value === 1
+          //       ? '<input type="checkbox" checked/>'
+          //       : '<input type="checkbox"/>';
+          //   },
+          // },
+          {
+            headerName: 'Vintage',
+            field: 'Vintage',
+            width: 100,
+            filter: 'agNumberColumnFilter',
+          },
+          {
+            headerName: 'Bought',
+            field: 'Bought',
+            width: 100,
+            filter: 'agNumberColumnFilter',
+          },
+          {
+            headerName: 'Consumed',
+            field: 'Consumed',
+            width: 120,
+            filter: 'agNumberColumnFilter',
+          },
+          {
+            headerName: 'Saldo',
+            field: 'Saldo',
+            width: 90,
+            filter: 'agNumberColumnFilter',
+          },
           {
             headerName: 'PriceEUR',
             field: 'PriceEUR',
-            width: 150,
+            width: 110,
+            filter: 'agNumberColumnFilter',
+            // headerStyle: { textAlign: 'center' },
+            // cellStyle: { textAlign: 'center' },
             valueFormatter: (params: { value: number }) => {
-              // Formatera talet med 2 decimaler
               return params.value ? params.value.toFixed(2) : '';
             },
           },
           {
             headerName: 'PriceSEK',
             field: 'PriceSEK',
-            width: 150,
+            width: 110,
+            filter: 'agNumberColumnFilter',
+            // headerStyle: { textAlign: 'center' },
+            // cellStyle: { textAlign: 'center' },
             valueFormatter: (params: { value: number }) => {
-              // Formatera talet med 2 decimaler
               return params.value ? params.value.toFixed(2) : '';
             },
           },

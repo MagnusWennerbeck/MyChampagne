@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,28 +9,24 @@ import { Observable, of } from 'rxjs';
 export class MySqlService {
   private apiUrl = 'http://localhost:3000/api/'; // Uppdatera URL:en enligt din server
 
-  // Konstruktor ...................................................................
-  // constructor() { }
+  private rowCountSubject = new BehaviorSubject<number>(0);
+  rowCount$ = this.rowCountSubject.asObservable();
+
   constructor(private http: HttpClient) {
     // this.getDataByMenuSelection('Wines');
   }
 
-  // getData(): Observable<any[]> {
-  //   console.log('MySqlService:getData() Observable');
-  //   return this.http.get<any[]>(this.apiUrl);
-  // }
-
-  // getDataByMenuSelection(menuSelection: string): Observable<any[]> {
-  //   const url = this.apiUrl + menuSelection;
-  //   return this.http.get<any[]>(url);
-  // }
 
   // Methods ......................................................................
 
   getDataByMenuSelection(menuSelection: string): Observable<any[]> {
     const url = this.apiUrl + menuSelection;
     console.log('mySqlService:getDataByMenuSelection() ', url);
-    return this.http.get<any[]>(url);
+     return this.http.get<any[]>(url);
+
+    // return this.http.get<any[]>(url).subscribe((data) => {
+    //   this.rowCountSubject.next(data.rowCount);
+    // });
   }
 
   // private getWinesData(): Observable<any[]> {

@@ -1,9 +1,42 @@
-<!-- <h1>{{ title }}</h1> -->
+<div id="top-bar">
+  <div class="top-row">
+    <div class="button-group">
+      <button (click)="scrollToFirstRow()">I<<<</button>
+      <button (click)="scrollToLastRow()">>>>I</button>
+    </div>
 
-<!-- <div class="button-group">
-  <button (click)="scrollToFirstRow()">I<<<</button>
-  <button (click)="scrollToLastRow()">>>>I</button>
-</div> -->
+    <div class="text-group">
+      <p style="margin-left: 10px; margin-right: 0px">Filter:</p>
+      <input
+        [(ngModel)]="quickFilter"
+        class="input-text"
+        type="text"
+        name="quickFilter"
+        (ngModelChange)="onQuickFilterChange($event)"
+        placeholder="Ange sökfilter"
+        style="margin-left: 5px; margin-right: 0px; width: 15%"
+      />
+
+      <button
+        (click)="clearFilter()"
+        style="margin-left: 5px; margin-right: 30px"
+      >
+        Töm
+      </button>
+
+      <button (click)="countSaldo()">Beräkna saldo</button>
+      <button>Beräkna saldo</button>
+      <button>Saldo > 0</button>
+      <button>Consumed = 0</button>
+      <p class="top-bar-text">Bought: {{ rowCount }}</p>
+      <p class="top-bar-text">Consumed: {{ rowCount }}</p>
+      <p class="top-bar-text">Saldo: {{ rowCount }}</p>
+    </div>
+  </div>
+  <div class="top-bar-text">
+    <p class="top-bar-text">Antal rader: {{ rowCount }}</p>
+  </div>
+</div>
 
 <ag-grid-angular
   #myGrid
@@ -14,9 +47,13 @@
   [defaultColDef]="defaultColDef"
   [columnDefs]="columnDefs"
   editType="fullRow"
+  (gridReady)="onGridReady($event)"
+  (firstDataRendered)="onFirstDataRendered($event)"
+  (rowDataChanged)="onRowDataChanged($event)"
+  (stateUpdated)="onStateUpdated($event)"
 ></ag-grid-angular>
 
-<table-form
+<!-- <table-form
   (scrollToFirstRowEvent)="handleScrollToFirstRow()"
   (scrollToLastRowEvent)="handleScrollToLastRow()"
-></table-form>
+></table-form> -->

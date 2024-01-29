@@ -7,6 +7,7 @@ form {
     flex-direction: column; /* Lägg till för att ändra layout till kolumn */
     align-items: left; /* Centrera innehållet vertikalt */
     border-bottom: 1px solid black;
+    z-index: 2;
   }
 
   .button-group {

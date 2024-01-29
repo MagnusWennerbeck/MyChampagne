@@ -21,26 +21,17 @@ export class TableFormComponent implements AfterContentInit {
   title = 'TableFormComponent';
 
   @ViewChild(TableGridComponent) tableGridComponent!: TableGridComponent;
-
-  formFilterValue: string = '';
   @Output() formFilterValueChange: EventEmitter<string> = new EventEmitter();
-
-  // formScrollValue: number = 0;
-  // @Output() formScrollValueChange: EventEmitter<number> = new EventEmitter();
-
   @Output() scrollToFirstRowEvent = new EventEmitter<void>();
   @Output() scrollToLastRowEvent = new EventEmitter<void>();
+  formFilterValue: string = '';
+  rowCount: number = 0;
+  
+  constructor(private cdRef: ChangeDetectorRef) {
+    console.log('TableFormComponent:constructor() has started...');
+  }
+
  
-  // scrollToFirstRow() {
-  //   this.scrollToFirstRowEvent.emit();
-  // }
-
-  // scrollToLastRow() {
-  //   this.scrollToLastRowEvent.emit();
-  // }
-  constructor(private cdRef: ChangeDetectorRef) {}
-
-  rowCount: number = 25;
   ngAfterContentInit() {
     // Manuell förnyelse av vyen
     this.cdRef.detectChanges();

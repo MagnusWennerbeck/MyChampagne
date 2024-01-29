@@ -29,7 +29,8 @@ function fetchData(query, res) {
         res.status(500).send(error);
         return;
       }
-      res.json(results);
+      // res.json(results);
+      res.json({ data: results, rowCount });
       console.log(`server.js:fetchData() - exit results = `, results);
     });
   }

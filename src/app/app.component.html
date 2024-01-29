@@ -1,17 +1,15 @@
-<!-- <button (click)="handleButtonClick()">Klicka här</button> -->
 <body>
   <header-menu
     (menuItemSelected)="handleMenuItemSelected($event)"
   ></header-menu>
 
-  <table-form
+  <!-- <table-form
     (formFilterValueChange)="handleFormFilterChange($event)"
     (scrollToFirstRowEvent)="handleScrollToFirstRow()"
     (scrollToLastRowEvent)="handleScrollToLastRow()"
-  ></table-form>
+  ></table-form> -->
 
-  <table-grid
-    [menuItemSelected]="menuItemSelected"
-    [formFilterValue]="formFilterValue"
-  ></table-grid>
+  <table-grid [menuItemSelected]="menuItemSelected"></table-grid>
+
+  <!-- [formFilterValue]="formFilterValue" -->
 </body>

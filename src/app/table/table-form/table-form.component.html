@@ -1,6 +1,4 @@
 <form>
-  <!-- <h3>{{ title }}</h3> -->
-
   <div class="button-group">
     <button (click)="scrollToFirstRow()">I<<<</button>
     <button (click)="scrollToLastRow()">>>>I</button>
@@ -12,7 +10,6 @@
       (ngModelChange)="applyFilter($event)"
       placeholder="Ange sökfilter"
     />
-
   </div>
 
   <div>Antal rader: {{ rowCount }}</div>

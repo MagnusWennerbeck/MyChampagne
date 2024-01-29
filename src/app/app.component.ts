@@ -1,10 +1,20 @@
-import { Component, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, NgModule, ViewChild } from '@angular/core';
+import { RouterModule, RouterOutlet, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HeaderMenuComponent } from './header-menu/header-menu.component';
 import { TableModule } from './table/table.module';
 import { TableGridComponent } from './table/table-grid/table-grid.component';
-import { TableFormComponent } from './table/table-form/table-form.component';
+import { AuthService } from './auth.service';
+import { RoutesService } from './app.routes'; // Var noga med att inkludera AppRoutingModule
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './auth.guard';
+
+const routes: Routes = [
+  { path: '', component: HeaderMenuComponent },
+  { path: 'grid', component: TableGridComponent, canActivate: [AuthGuard] }, // Use your AuthGuard
+];
+
 
 @Component({
   selector: 'app-root',
@@ -14,19 +24,28 @@ import { TableFormComponent } from './table/table-form/table-form.component';
   imports: [
     RouterOutlet,
     CommonModule,
+    FormsModule,
     TableModule,
     HeaderMenuComponent,
     TableGridComponent,
-    TableFormComponent,
   ],
 })
 export class AppComponent {
+  password = '';
   title = 'MyChampagnes';
   menuItemSelected: any; // variable for selected meny item, passed to TableGridComponent
   formFilterValue: any; // variable for form filter value, passed to TableGridComponent
   formScrollValue: any; // variable for form button value, passed to TableGridComponent
   @ViewChild(TableGridComponent) tableGrid!: TableGridComponent;
 
+  constructor(public authService: AuthService) {
+    console.log('AppComponent:constructor() has started...');
+    // login(): void {
+    //   this.authService.login(this.password);
+    // }
+  }
+
+  login() {}
   handleMenuItemSelected(menuItem: string): void {
     this.menuItemSelected = menuItem;
     // console.log(
@@ -56,3 +75,12 @@ export class AppComponent {
     this.tableGrid.handleScrollToLastRow();
   }
 }
+function login() {
+  throw new Error('Function not implemented.');
+}
+
+@NgModule({
+  declarations: [],
+  imports: [FormsModule, AppComponent],
+})
+export class AppModule {}

@@ -1,0 +1,9 @@
+<div *ngIf="authService.isAuthenticated$ | async">
+  <!-- Innehållet som ska skyddas -->
+  <p>Välkommen till den skyddade sidan!</p>
+</div>
+<div *ngIf="!(authService.isAuthenticated$ | async)">
+  <!-- Lösenordsformulär om användaren inte är autentiserad -->
+  <input type="password" [(ngModel)]="password" placeholder="Lösenord" />
+  <button (click)="login()">Logga in</button>
+</div>

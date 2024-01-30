@@ -1,0 +1,42 @@
+`<div class="test-container">
+    <div class="test-header">
+      <label>
+        <input
+          type="radio"
+          name="filter"
+          id="everyone"
+          (change)="externalFilterChanged('everyone')"
+        />
+        Bought
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="filter"
+          id="below25"
+          (change)="externalFilterChanged('below25')"
+        />
+        Consumed
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="filter"
+          id="between25and50"
+          (change)="externalFilterChanged('between25and50')"
+        />
+        Saldo
+      </label>      
+    </div>
+    
+    <ag-grid-angular
+      style="width: 100%; height: 100%;"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [isExternalFilterPresent]="isExternalFilterPresent"
+      [doesExternalFilterPass]="doesExternalFilterPass"
+      [rowData]="rowData"
+      [class]="themeClass"
+      (gridReady)="onGridReady($event)"
+    ></ag-grid-angular>
+  </div> `,

@@ -10,7 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { MySqlService } from '../mysql.service';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-import { ColDef, createGrid } from 'ag-grid-community';
+import { ColDef, GridApi, createGrid } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { GridOptions } from 'ag-grid-community';
 // import { TableFormComponent } from '../table-form/table-form.component';
@@ -44,9 +44,19 @@ export class TableGridComponent implements OnInit, OnChanges {
   @Input() menuItemSelected: string = ''; // input from HeadermenyComponent, triggered when user changes menu item
   @Input() formFilterValue: string = ''; // old solution with TableFormComonent - not used anymore
 
-  gridOptions: any;
+  // gridOptions: any;
+
+  gridOptions: GridOptions = {
+    isExternalFilterPresent: this.isExternalFilterPresent.bind(this),
+    doesExternalFilterPass: this.doesExternalFilterPass.bind(this),
+  };
+
   rowCount: number = 0;
   quickFilter: string | undefined;
+
+  countBought: number = 0;
+  countConsumed: number = 0;
+  countSaldo: number = 0;
 
   // Constructor ..............................................................
   constructor(private mysqlService: MySqlService, private datePipe: DatePipe) {
@@ -56,36 +66,118 @@ export class TableGridComponent implements OnInit, OnChanges {
   // Utility methods ...........................................................
   private getRowCount() {
     this.rowCount = this.grid.api.getDisplayedRowCount();
+    this.calculateAllSaldos();
     // console.log('TableGridComponent:getRowCount()  rowCount=', this.rowCount);
   }
 
-  applyQuickFilter(filterValue: string) {
-    this.grid.api.setGridOption('quickFilterText', filterValue);
+  private gridApi!: GridApi;
+
+  externaFilterVar: boolean | undefined;
+
+  isExternalFilterPresent(): boolean {
+    console.log('TableGridComponent:this.filterSaldoNotZero() >>>>>>>> #1');
+    return this.externaFilterVar !== undefined;
+  }
+
+  doesExternalFilterPass(node: any): boolean {
+    console.log('TableGridComponent:this.filterSaldoNotZero() >>>>>>>> #2');
+    return node.data.Saldo2 > 0;
+  }
+
+  // GUI Event handlers ********************************************************
+
+  // Button for filtering Saldo > 0
+  filterSaldoNotZero() {
+    this.externaFilterVar = true;
+    this.grid.api.onFilterChanged();
+    // this.gridApi.api.onFilterChanged();
+
+    console.log('TableGridComponent:this.filterSaldoNotZero() >>>>>>>> #3');
+  }
+
+  // Radio options for how calculation of saldo shall be done
+  currentOption = 'Bought';
+  externalFilterChanged(option: string) {
+    this.currentOption = option;
+    this.grid.api.onFilterChanged();
+    // this.gridApi.onFilterChanged();
     console.log(
-      'TableGridComponent:this.applyFilter()  filterValue=  ',
-      filterValue
+      'TableGridComponent:externalFilterChanged()  option=  ',
+      option
     );
   }
+
+  // Callback methods related to quickFilter
   onQuickFilterChange(filterValue: string) {
+    this.applyQuickFilter(filterValue);
     console.log(
       'TableGridComponent:onQuickFilterChange Quick filter changed: ',
       filterValue
     );
-    this.applyQuickFilter(filterValue);
   }
+  // Used in onQuickFilterChange()
+  applyQuickFilter(filterValue: string) {
+    this.grid.api.setGridOption('quickFilterText', filterValue);
+    this.quickFilter = filterValue;
+    this.getRowCount();
+    console.log(
+      'TableGridComponent:this.applyFilter()  >>>>> filterValue=  ',
+      filterValue
+    );
+  }
+
+  // Button for clearing the quickFilter textbox
   clearFilter() {
-    this.grid.api.setGridOption('quickFilterText', '');
     this.quickFilter = '';
+    this.grid.api.setGridOption('quickFilterText', '');
+    // this.grid.api.resetQuickFilter();  // doesn't work
+    this.getRowCount();
     console.log(
       'TableGridComponent:clearFilter() quickFilter= ',
       this.quickFilter
     );
   }
 
-  countSaldo() {
-    console.log('TableGridComponent:countSaldo() calling onGridReady()');
-    this.onGridReady(null);
+  // Callback for calculating saldo's
+  calculateAllSaldos() {
+    console.log('TableGridComponent:countSaldo() ');
+    this.countBought = this.calculateBought();
+    this.countConsumed = this.calculateConsumed();
+    this.countSaldo = this.calculateSaldo();
   }
+
+  calculateBought() {
+    let sum = 0;
+    this.grid.api.forEachNodeAfterFilter((node) => {
+      const cellValue = node.data.Bought;
+      if (!isNaN(cellValue)) {
+        sum += parseFloat(cellValue);
+      }
+    });
+    return sum;
+  }
+  calculateConsumed() {
+    let sum = 0;
+    this.grid.api.forEachNodeAfterFilter((node) => {
+      const cellValue = node.data.Consumed;
+      if (!isNaN(cellValue)) {
+        sum += parseFloat(cellValue);
+      }
+    });
+    return sum;
+  }
+  calculateSaldo() {
+    let sum = 0;
+    this.grid.api.forEachNodeAfterFilter((node) => {
+      const cellValue = node.data.Saldo;
+      if (!isNaN(cellValue)) {
+        sum += parseFloat(cellValue);
+      }
+    });
+    return sum;
+  }
+
+  // -------------------------------------------------------------------
 
   // AG grid methods ...........................................................
 
@@ -96,7 +188,8 @@ export class TableGridComponent implements OnInit, OnChanges {
       defaultColDef: {
         editable: true,
       },
-      rowHeight: 25,
+
+      rowHeight: 25, // this is used for setting of the gridrows height
 
       // onRowDataUpdated: this.onLoadedData.bind(this),
       // onFirstDataRendered: this.onFirstDataRendered.bind(this),
@@ -189,10 +282,17 @@ export class TableGridComponent implements OnInit, OnChanges {
   onCellValueChanged(event: any) {
     const rowIndex = event.rowIndex;
     const columnHeader = event.column.getId();
-    const newCellValue = event.newValue;
+    let newCellValue = event.newValue;
     const rowData = event.node.data;
     const rowId = rowData.Id;
-
+    // Om det är en checkboxkolumn
+    if (columnHeader === 'IsRose') {
+      newCellValue = rowData.IsRose; // Hämta checkboxvärdet från datamodellen
+      console.log(
+        'columnHeader === IsRose - Checkbox value changed:',
+        newCellValue
+      );
+    }
     console.log(
       'columnHeader=',
       columnHeader,
@@ -208,9 +308,11 @@ export class TableGridComponent implements OnInit, OnChanges {
     this.updateDatabase(rowId, columnHeader, newCellValue);
   }
 
-  updateDatabase(id: number, columnName: string, newValue: any) {
-
-    this.mysqlService.updateDatabase(id, columnName, newValue).subscribe(response => {});
+  updateDatabase(id: string, columnName: string, newValue: any) {
+    this.mysqlService
+      .updateDatabase(id, columnName, newValue)
+      .subscribe((response) => {});
+    console.log('id: ', id, 'columnName: ', columnName, 'newValue:', newValue);
   }
 
   // loadData .................................................................
@@ -270,13 +372,20 @@ export class TableGridComponent implements OnInit, OnChanges {
           },
           {
             headerName: 'IsRose',
+            // checkboxSelection: true,
             field: 'IsRose',
             width: 100,
-            // checkboxSelection: true,
+            editable: true,
             cellRenderer: function (params: { value: number }) {
               return params.value === 1
                 ? '<input type="checkbox" checked/>'
                 : '<input type="checkbox"/>';
+            },
+
+            onCellClicked: (params: { data: { IsRose: any } }) => {
+              params.data.IsRose = params.data.IsRose === 1 ? 0 : 1;
+              console.log('Checkbox value changed:', params.data.IsRose);
+              this.onCellValueChanged(params);
             },
           },
           // {
@@ -319,8 +428,6 @@ export class TableGridComponent implements OnInit, OnChanges {
             field: 'PriceEUR',
             width: 110,
             filter: 'agNumberColumnFilter',
-            // headerStyle: { textAlign: 'center' },
-            // cellStyle: { textAlign: 'center' },
             valueFormatter: (params: { value: number }) => {
               return params.value ? params.value.toFixed(2) : '';
             },
@@ -330,8 +437,6 @@ export class TableGridComponent implements OnInit, OnChanges {
             field: 'PriceSEK',
             width: 110,
             filter: 'agNumberColumnFilter',
-            // headerStyle: { textAlign: 'center' },
-            // cellStyle: { textAlign: 'center' },
             valueFormatter: (params: { value: number }) => {
               return params.value ? params.value.toFixed(2) : '';
             },
@@ -339,6 +444,7 @@ export class TableGridComponent implements OnInit, OnChanges {
           {
             headerName: 'BoughtWhen',
             field: 'BoughtWhen',
+            filter: 'agDateColumnFilter',
             cellRenderer: (data: { value: string | number | Date }) => {
               return data.value
                 ? new Date(data.value).toLocaleDateString()

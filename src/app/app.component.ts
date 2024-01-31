@@ -10,6 +10,12 @@ import { RoutesService } from './app.routes'; // Var noga med att inkludera AppR
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
 
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { ToastrModule } from 'ngx-toastr';
+
+
 const routes: Routes = [
   { path: '', component: HeaderMenuComponent },
   { path: 'grid', component: TableGridComponent, canActivate: [AuthGuard] }, // Use your AuthGuard
@@ -28,6 +34,9 @@ const routes: Routes = [
     TableModule,
     HeaderMenuComponent,
     TableGridComponent,
+    // BrowserModule,
+    // BrowserAnimationsModule,
+   
   ],
 })
 export class AppComponent {

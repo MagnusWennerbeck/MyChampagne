@@ -7,8 +7,9 @@
       "type": "chrome",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
-      // "runtimeExecutable": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\brave.exe"
+      "url": "http://localhost:4200/",
+      "runtimeExecutable": "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"
+      // "runtimeExecutable": "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"
   
     },
     {

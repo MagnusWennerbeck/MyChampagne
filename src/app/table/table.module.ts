@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TableGridComponent } from './table-grid/table-grid.component';
 // import { TableDataService } from './table-grid/table-data.service';
 import { MySqlService } from './mysql.service';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [] ,

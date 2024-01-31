@@ -14,11 +14,12 @@ export class MySqlService {
 
   constructor(private http: HttpClient) {}
 
-  // Methods ......................................................................
-
+  // =============================================================================
+  // SELECT
+  // =============================================================================
   getDataByMenuSelection(menuSelection: string): Observable<any[]> {
-    const url = this.apiUrl + menuSelection;
-    console.log('mySqlService:getDataByMenuSelection() ', url);
+    const url = `${this.apiUrl}tables/${menuSelection}`;
+    console.log('mySqlService: getDataByMenuSelection() ', url);
     return this.http.get<any[]>(url);
   }
 
@@ -32,22 +33,50 @@ export class MySqlService {
   //   return response;
   // }
 
-  updateDatabase(id: string, columnHeader: string, value: string): Observable<any> {
-    const updateUrl = `http://localhost:3000/api/Wines/updateCell/${id}`;
+  // =============================================================================
+  // UPDATE
+  // =============================================================================
+  updateDatabase(
+    table: string,
+    id: string,
+    columnHeader: string,
+    value: string
+  ): Observable<any> {
+    // const updateUrl = `http://localhost:3000/api/${table}/updateCell/${id}`;
+
+    const url = `${this.apiUrl}tables/${table}/updateCell/${id}`;
 
     // Skicka förfrågan och använd map-operatorn för att hantera svaret
-    return this.http.put(updateUrl, { columnName: columnHeader, newValue: value }).pipe(
-      map((response: any) => {
-        if (response.success) {
-          // Uppdateringen lyckades
-          console.log(response.message);
-        } else {
-          // Uppdateringen misslyckades
-          console.error(response.message);
-        }
+    return this.http
+      .put(url, { columnName: columnHeader, newValue: value })
+      .pipe(
+        map((response: any) => {
+          if (response.success) {
+            // Uppdateringen lyckades
+            console.log(response.message);
+          } else {
+            // Uppdateringen misslyckades
+            console.error(response.message);
+          }
 
-        return response; // Returnera svaret för vidare hantering om det behövs
-      })
-    );
+          return response; // Returnera svaret för vidare hantering om det behövs
+        })
+      );
+  }
+  // =============================================================================
+  // ADD
+  // =============================================================================
+  addRow(table: string, newRowData: any): Observable<any> {
+    const url = `${this.apiUrl}tables/${table}/addRow`;
+    console.log('mySqlService:addRow()', url);
+    return this.http.post<any>(url, newRowData);
+  }
+  // =============================================================================
+  // DELETE
+  // =============================================================================
+  deleteRow(table: string, rowId: any): Observable<any> {
+    const url = `${this.apiUrl}tables/${table}/deleteRow/${rowId}`;
+    console.log('mySqlService:deleteRow()', url);
+    return this.http.delete<any>(url);
   }
 }

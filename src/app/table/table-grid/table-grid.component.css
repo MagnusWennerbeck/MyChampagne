@@ -18,7 +18,14 @@
     padding-left:0;
     padding-right:0;
   }
-
+  .ag-root-wrapper-body-NOT-USED {
+    overflow: hidden;   /* Döljer den naturliga horisontella scrollbaren för hela sidan */
+    position: relative; /* För att positionera den inre scrollbar */
+    bottom: 0;          /* Placera den inre Ag-Grid-elementet relativt och flytta det längst ned med bottom: 0. */
+  }
+  .my-ag-grid-container {
+    overflow: hidden;
+  }
   /* Top-bar */
   /* Design: knapparna ligger överst med en lagom avstånd både uppåt och nedåt */
   /* Alla texter som ska skrivas ut hamnar på raden under, på lagom avstånd från nedre kanten  */
@@ -58,7 +65,8 @@
     padding: 0px 5px;  /* första är höjd, andra är bredd - */
     line-height: 1; /* Återställ standard line-height för att undvika överflödigt utrymme */
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    /* max-width: 10; */
   }
 
   .button-group {

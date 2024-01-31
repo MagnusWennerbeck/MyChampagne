@@ -43,6 +43,13 @@
     -->
       <!-- Radio buttons for filtering on saldo END -->
 
+      <button (click)="addRow($event)" style="margin-right: 10px">
+        Lägg till ny rad
+      </button>
+      <button (click)="deleteRow($event)" tyle="margin-right: 25px">
+        Ta bort rad
+      </button>
+
       <button
         (click)="filterSaldoNotZero()"
         style="margin-left: 50px; margin-right: 50px"
@@ -75,9 +82,9 @@
       <!-- grupp för att hantera saldo beräkning -->
       <!-- <div> -->
       <!-- <button (click)="countSaldo()">Beräkna saldo</button> -->
-      <p class="top-bar-text">Bought: {{ countBought }}</p>
-      <p class="top-bar-text">Consumed: {{ countConsumed }}</p>
-      <p class="top-bar-text">Saldo: {{ countSaldo }}</p>
+      <p class="top-bar-text">Köpt: {{ countBought }}</p>
+      <p class="top-bar-text">Druckit: {{ countConsumed }}</p>
+      <p class="top-bar-text">Kvar: {{ countSaldo }}</p>
       <button (click)="calculateAllSaldos()">Beräkna saldo</button>
 
       <!-- </div> -->
@@ -87,24 +94,38 @@
   <!-- text row, lowest row, closest to the grid -->
   <div class="top-bar-text">
     <p class="top-bar-text">Antal rader: {{ rowCount }}</p>
+
+    <p class="top-bar-text" style="margin-left: 50px; color: blue">
+      >> {{ appMessage }}
+    </p>
   </div>
 
-  <ag-grid-angular
-    #myGrid
-    style="width: 100%; height: 800px"
-    class="ag-theme-alpine"
-    [rowData]="data"
-    [gridOptions]="gridOptions"
-    [columnDefs]="columnDefs"
-    [defaultColDef]="defaultColDef"
-    editType="fullRow"
-    (gridReady)="onGridReady($event)"
-    (firstDataRendered)="onFirstDataRendered($event)"
-    (rowDataChanged)="onRowDataChanged($event)"
-    (stateUpdated)="onStateUpdated($event)"
-    (cellValueChanged)="onCellValueChanged($event)"
-  ></ag-grid-angular>
-
+  <!-- class="ag-theme-quartz " -->
+  <!-- class="ag-theme-material " -->
+  <!-- class="ag-theme-alpine " -->
+  <!-- class="ag-theme-balham"
+   -->
+  <div class="my-ag-grid-container">
+    <ag-grid-angular
+      #myGrid
+      id="myGrid"
+      style="width: 100%; height: 765px"
+      ag-row-border-width="0"
+      class="ag-theme-alpine"
+      RowModelType="ClientSide"
+      [rowData]="gridContent"
+      [gridOptions]="gridOptions"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      editType="fullRow"
+      (gridReady)="onGridReady($event)"
+      (firstDataRendered)="onFirstDataRendered($event)"
+      (rowDataChanged)="onRowDataChanged($event)"
+      (stateUpdated)="onStateUpdated($event)"
+      (cellValueChanged)="onCellValueChanged($event)"
+      (rowClicked)="onRowClicked($event)"
+    ></ag-grid-angular>
+  </div>
   <!-- 
 -->
 

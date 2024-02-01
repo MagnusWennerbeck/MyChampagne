@@ -1,10 +1,17 @@
-import { bootstrapApplication } from '@angular/platform-browser';
+import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { environment } from './environments/environment'
 import { AppComponent } from './app/app.component';
-// import { ToastrModule } from 'ngx-toastr';
+import { bootstrapApplication } from '@angular/platform-browser';
 
-// ToastrModule.forRoot({
-//   timeOut: 3000, // Tid i millisekunder för hur länge meddelandet ska visas
-//   positionClass: 'toast-top-right', // Placering av toast-meddelandet på skärmen
-//   preventDuplicates: true, // Förhindra dubbletter
-// });
+// if (environment.production) {
+//   enableProdMode();
+// }
+
+
 bootstrapApplication(AppComponent).catch((err) => console.error(err));
+
+// platformBrowserDynamic()
+//   .bootstrapModule(AppComponent)
+//   .catch((err) => console.error(err));
+

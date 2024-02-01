@@ -42,7 +42,11 @@
       </div>
     -->
       <!-- Radio buttons for filtering on saldo END -->
-
+      <button (click)="increaseHeight()">Höjd +</button>
+      <button (click)="decreaseHeight()">Höjd -</button>
+      <button (click)="onExport($event)" style="margin-right: 10px">
+        Export till Excel
+      </button>
       <button (click)="addRow($event)" style="margin-right: 10px">
         Lägg till ny rad
       </button>
@@ -105,12 +109,15 @@
   <!-- class="ag-theme-alpine " -->
   <!-- class="ag-theme-balham"
    -->
-  <div class="my-ag-grid-container">
+
+  <!-- ag-row-border-width="5" -->
+</div>
+
     <ag-grid-angular
       #myGrid
       id="myGrid"
-      style="width: 100%; height: 700px"
-      ag-row-border-width="0"
+      [style.width]="gridWidth"
+      [style.height]="gridHeight"
       class="ag-theme-alpine"
       RowModelType="ClientSide"
       [rowData]="gridContent"
@@ -125,12 +132,10 @@
       (cellValueChanged)="onCellValueChanged($event)"
       (rowClicked)="onRowClicked($event)"
     ></ag-grid-angular>
-  </div>
-  <!-- 
--->
+
 
   <!-- <table-form
   (scrollToFirstRowEvent)="handleScrollToFirstRow()"
   (scrollToLastRowEvent)="handleScrollToLastRow()"
 ></table-form> -->
-</div>
+

@@ -18,16 +18,8 @@ import {
 } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { GridOptions } from 'ag-grid-community';
-// import { TableFormComponent } from '../table-form/table-form.component';
 import { FormsModule } from '@angular/forms';
-import { AllModules } from '@ag-grid-enterprise/all-modules'; // Importera AllModules
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { ToastrService } from 'ngx-toastr';
-
-// FUTURE
-// import { ModuleRegistry } from '@ag-grid-community/core';
-// import { SideBarModule } from '@ag-grid-enterprise/side-bar';
+import { ElementRef, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'table-grid',
@@ -56,6 +48,7 @@ export class TableGridComponent implements OnInit, OnChanges {
   @ViewChild('quickFilter') filter!: AgGridAngular;
   @Input() menuItemSelected: string = ''; // input from HeadermenyComponent, triggered when user changes menu item
   @Input() formFilterValue: string = ''; // old solution with TableFormComonent - not used anymore
+  @ViewChild('gridContainer') gridContainer!: ElementRef;
 
   // ModuleRegistry.registerModules([ SideBarModule ]);  // FUTURE
 
@@ -66,7 +59,7 @@ export class TableGridComponent implements OnInit, OnChanges {
     // onFirstDataRendered: this.onFirstDataRendered.bind(this),
     // onGridReady: this.onGridReady.bind(this),
     suppressHorizontalScroll: true,
-    alwaysShowHorizontalScroll: false,
+    alwaysShowHorizontalScroll: true,
 
     // suppressVerticalScroll: true,
     // sideBar=true
@@ -652,6 +645,8 @@ export class TableGridComponent implements OnInit, OnChanges {
         console.error('Error adding row:', error);
       }
     );
+
+    this.adjustGridSize(700);
   }
   // ************************************
   findMaxValue(columnName: string): number {
@@ -728,5 +723,38 @@ export class TableGridComponent implements OnInit, OnChanges {
     );
 
     this.loadData();
+  }
+
+  onExport(event: any) {
+    console.log('TableGridComponent: onExport() >>>> #1');
+    this.adjustGridSize(500);
+    // this.grid.api.
+    // old excel code
+    // const params = {fileName: 'exported-data.xlsx'};
+    // var result = this.grid.api.exportDataAsExcel(params);
+  }
+
+  gridWidth: string = '100%';
+  gridHeight: string = '700px';
+
+  adjustGridSize(height: number): void {
+    // Exempel: Ändra storleken beroende på förälderns storlek
+    const parentWidth =
+      this.gridContainer.nativeElement.parentElement.clientWidth;
+    const parentHeight =
+      this.gridContainer.nativeElement.parentElement.clientHeight;
+
+    this.gridWidth = `${parentWidth}px`;
+    this.gridHeight = `${parentHeight}px`;
+  }
+
+  increaseHeight() {
+    const currentHeight = parseInt(this.gridHeight, 10);
+    this.gridHeight = `${currentHeight + 25}px`;
+  }
+
+  decreaseHeight() {
+    const currentHeight = parseInt(this.gridHeight, 10);
+    this.gridHeight = `${Math.max(currentHeight - 25, 0)}px`;
   }
 }

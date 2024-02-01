@@ -10,17 +10,17 @@ import { RoutesService } from './app.routes'; // Var noga med att inkludera AppR
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
 
+// import { ModuleRegistry } from '@ag-grid-community/core';
+// import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { ToastrModule } from 'ngx-toastr';
-
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [
   { path: '', component: HeaderMenuComponent },
   { path: 'grid', component: TableGridComponent, canActivate: [AuthGuard] }, // Use your AuthGuard
 ];
-
 
 @Component({
   selector: 'app-root',
@@ -34,9 +34,7 @@ const routes: Routes = [
     TableModule,
     HeaderMenuComponent,
     TableGridComponent,
-    // BrowserModule,
-    // BrowserAnimationsModule,
-   
+    MatIconModule
   ],
 })
 export class AppComponent {
@@ -46,6 +44,8 @@ export class AppComponent {
   formFilterValue: any; // variable for form filter value, passed to TableGridComponent
   formScrollValue: any; // variable for form button value, passed to TableGridComponent
   @ViewChild(TableGridComponent) tableGrid!: TableGridComponent;
+
+  // ModuleRegistry: any.registerModules([ ExcelExportModule ]);
 
   constructor(public authService: AuthService) {
     console.log('AppComponent:constructor() has started...');

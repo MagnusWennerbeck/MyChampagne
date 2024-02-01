@@ -164,7 +164,7 @@ export class TableGridComponent implements OnInit, OnChanges {
 
   // Callback for calculating saldo's
   calculateAllSaldos() {
-    console.log('TableGridComponent:countSaldo() ');
+    console.log('TableGridComponent:calculateAllSaldos() ');
     this.countBought = this.calculateBought();
     this.countConsumed = this.calculateConsumed();
     this.countSaldo = this.calculateSaldo();
@@ -177,6 +177,7 @@ export class TableGridComponent implements OnInit, OnChanges {
         sum += parseFloat(cellValue);
       }
     });
+    console.log('TableGridComponent:calculateBought() ', sum);
     return sum;
   }
   calculateConsumed() {
@@ -187,6 +188,8 @@ export class TableGridComponent implements OnInit, OnChanges {
         sum += parseFloat(cellValue);
       }
     });
+    console.log('TableGridComponent:calculateConsumed() ', sum);
+
     return sum;
   }
   calculateSaldo() {
@@ -197,6 +200,8 @@ export class TableGridComponent implements OnInit, OnChanges {
         sum += parseFloat(cellValue);
       }
     });
+    console.log('TableGridComponent:calculateSaldo() ', sum);
+
     return sum;
   }
 
@@ -627,30 +632,40 @@ export class TableGridComponent implements OnInit, OnChanges {
   // ADD
   // =============================================================================
   addRow(event: any) {
-    const newRowData = {};
+    let newId: number = this.findMaxValue('Id') + 1;
 
-    this.mySqlService.addRow(this.menuItemSelected, newRowData).subscribe(
+    console.log(
+      'TableGridConmponent: addRow()   tableName=',
+      this.menuItemSelected,
+      'id=',
+      newId
+    );
+
+    this.mySqlService.addRow(this.menuItemSelected, newId).subscribe(
       (response) => {
         console.log('Row added successfully:', response);
         // Hämta uppdaterad data om det behövs
         this.loadData();
+        this.scrollToLastRow();
       },
       (error) => {
         console.error('Error adding row:', error);
       }
     );
-
-    // console.log('TableGridComponent: addRow() >>>> #100');
-
-    // const newRow = {
-    //   id: this.gridContent.length + 1,
-    //   name: `Row ${this.gridContent.length + 1}`,
-    //   value: `Value ${this.gridContent.length + 1}`,
-    // };
-
-    // this.grid.api.applyTransaction({ add: [newRow] });
+  }
+  // ************************************
+  findMaxValue(columnName: string): number {
+    let maxValue = Number.MIN_VALUE; // Sätt initialt till det minsta möjliga värdet
+    this.grid.api.forEachNodeAfterFilter((node) => {
+      const cellValue = node.data[columnName];
+      if (!isNaN(cellValue)) {
+        maxValue = Math.max(maxValue, parseFloat(cellValue));
+      }
+    });
+    return maxValue;
   }
 
+  // ************************************
   private debug: boolean = true;
   // =============================================================================
   // DELETE

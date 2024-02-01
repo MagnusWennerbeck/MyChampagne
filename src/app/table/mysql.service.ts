@@ -66,16 +66,16 @@ export class MySqlService {
   // =============================================================================
   // ADD
   // =============================================================================
-  addRow(table: string, newRowData: any): Observable<any> {
-    const url = `${this.apiUrl}tables/${table}/addRow`;
+  addRow(tableName: string, id: number): Observable<any> {
+    const url = `${this.apiUrl}tables/${tableName}/addRow`;
     console.log('mySqlService:addRow()', url);
-    return this.http.post<any>(url, newRowData);
+    return this.http.post<any>(url, { table: tableName, id: id });
   }
   // =============================================================================
   // DELETE
   // =============================================================================
-  deleteRow(table: string, rowId: any): Observable<any> {
-    const url = `${this.apiUrl}tables/${table}/deleteRow/${rowId}`;
+  deleteRow(table: string, wineId: any): Observable<any> {
+    const url = `${this.apiUrl}tables/${table}/deleteRow/${wineId}`;
     console.log('mySqlService:deleteRow()', url);
     return this.http.delete<any>(url);
   }

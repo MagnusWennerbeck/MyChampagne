@@ -140,13 +140,28 @@ app.put('/api/tables/:tableName/updateCell/:id', (req, res) => {
 // Generisk endpoint för att lägga till en rad i en specifik tabell
 app.post('/api/tables/:tableName/addRow', (req, res) => {
  
-  console.log('Server AddRow =====> ');
+  console.log('Server AddRow =====> #1');
 
   const tableName = req.params.tableName;
-  const newRowData = req.body;
-  res.json({ message: 'Row added successfully' });
+  let id = req.body.id;
+
+  console.log('Server AddRow =====> #2   tableName=', tableName, 'id=', id);
+
+  const insertQuery = 'INSERT INTO ' + tableName + ' (Id) VALUES (?)';
+
+  console.log('Server AddRow =====> #3   ', insertQuery);
+
+  connection.query(insertQuery, [id], function (err) {
+    if (err) {
+      console.error(err.message);
+      res.status(500).json('Internal Server Error');
+      return;
+    }
+    res.status(200).json({ message: 'Row created successfully' });
+  });
 
 });
+
 
 // =============================================================================
 // DELETE

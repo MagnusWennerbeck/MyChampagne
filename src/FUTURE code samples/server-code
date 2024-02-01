@@ -1,0 +1,40 @@
+// Exempel med SELECT-endpoint
+app.get('/api/get-data', (req, res) => {
+  mySqlService.getData()
+    .then(data => {
+      res.json({ success: true, data: data });
+    })
+    .catch(error => {
+      console.error('Fel vid hämtning av data:', error);
+      res.status(500).json({ success: false, error: 'Serverfel' });
+    });
+});
+
+// Exempel med UPDATE-endpoint
+app.put('/api/update-data/:id', (req, res) => {
+  const id = req.params.id;
+  const newData = req.body.newData;
+
+  mySqlService.updateData(id, newData)
+    .then(result => {
+      res.json({ success: true, message: 'Uppdatering lyckades' });
+    })
+    .catch(error => {
+      console.error('Fel vid uppdatering av data:', error);
+      res.status(500).json({ success: false, error: 'Serverfel' });
+    });
+});
+
+// Exempel med DELETE-endpoint
+app.delete('/api/delete-data/:id', (req, res) => {
+  const id = req.params.id;
+
+  mySqlService.deleteData(id)
+    .then(result => {
+      res.json({ success: true, message: 'Radering lyckades' });
+    })
+    .catch(error => {
+      console.error('Fel vid radering av data:', error);
+      res.status(500).json({ success: false, error: 'Serverfel' });
+    });
+});

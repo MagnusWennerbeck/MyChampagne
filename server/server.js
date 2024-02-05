@@ -3,19 +3,37 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const cors = require("cors");
+
 const app = express();
+const PORT = 3000;
 
 app.use(cors()); // FRÅGA GPT OM VAD DENNA GÖR
 
 // Använd bodyParser middleware för att hantera JSON i förfrågningskroppen
 app.use(bodyParser.json());
 
+//DEV
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
   database: "myChampagne",
 });
+
+//PROD
+// const connection = mysql.createConnection({
+//   host: "127.0.0.1",
+//   user: "root",
+//   password: "apos*9900B",
+//   database: "my_champagne",
+//   PORT: 3306
+// });
+
+// Definiera en väg för roten
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 
 // Db connection setup and listen to port
 connection.connect();
@@ -24,6 +42,10 @@ app.listen(port, () => {
   console.log(`server.js:listen() Server is running on port ${port}`);
 });
 
+// Lyssna på porten
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
 
 
   // connection.query(query, (error, results, fields) => {

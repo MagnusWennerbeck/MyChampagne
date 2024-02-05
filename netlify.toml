@@ -2,7 +2,7 @@
 [build]
   command = "ng build --configuration=production"
   functions = "netlify/functions"
-  publish = "dist/my-champagne/bnrowser"
+  publish = "dist/my-champagne/browser"
 
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.

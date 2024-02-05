@@ -1,8 +1,8 @@
 # example netlify.toml
 [build]
-  command = "ng build --prod"
+  command = "ng build --configuration=production"
   functions = "netlify/functions"
-  publish = "dist/my-champagne"
+  publish = "dist/my-champagne/bnrowser"
 
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.

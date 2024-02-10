@@ -8,7 +8,7 @@ import { TableDataService } from '../table/table-grid/table-data.service';
   styleUrls: ['./header-menu.component.css'],
 })
 export class HeaderMenuComponent {
-  title = 'Mina Champagner';
+  title = 'Mina Champagner 2024';
 
   @Output() menuItemSelected: EventEmitter<any> = new EventEmitter();
 

@@ -18,20 +18,10 @@ export class MySqlService {
   // SELECT
   // =============================================================================
   getDataByMenuSelection(menuSelection: string): Observable<any[]> {
-    const url = `${this.apiUrl}tables/${menuSelection}`;
+    const url = `${this.apiUrl}tables/${menuSelection.toLowerCase()}`;
     console.log('mySqlService: getDataByMenuSelection() ', url);
     return this.http.get<any[]>(url);
   }
-
-  // updateDatabase2(
-  //   id: string,
-  //   columnHeader: string,
-  //   value: string
-  // ): Observable<any[]> {
-  //   const updateUrl = `http://localhost:3000/api/Wines/updateCell/${wineId}`;
-
-  //   return response;
-  // }
 
   // =============================================================================
   // UPDATE

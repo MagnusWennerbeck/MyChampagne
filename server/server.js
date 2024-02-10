@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 connection.connect();
 const port = 3000;
 app.listen(port, () => {
-  console.log(`server.js:listen() Server is running on port ${port}`);
+  console.log(`server.js:listen() Server XYZ is running on port ${port}`);
 });
 
 // Lyssna på porten
@@ -74,11 +74,11 @@ app.get('/api/tables/:tableName', (req, res) => {
   const tableName = req.params.tableName;
   const query = `SELECT * FROM ${tableName}`;
   fetchData(query, res);
-  console.log(query);
+  console.log('app.get ------------> ', query);
 });
 // general method to get data by query
 function fetchData(query, res) {
-  console.log(`server.js:fetchData() - enter sql = `, query);
+  console.log(`server.js:fetchData() ========> sql = `, query);
   connection.query(query, (error, results, fields) => {
     if (error) {
       res.status(500).send(error);

@@ -7,9 +7,7 @@ const cors = require("cors");
 const app = express();
 const PORT = 3000;
 
-app.use(cors()); // FRÅGA GPT OM VAD DENNA GÖR
-
-// Använd bodyParser middleware för att hantera JSON i förfrågningskroppen
+app.use(cors());
 app.use(bodyParser.json());
 
 //DEV
@@ -23,23 +21,23 @@ const connection = mysql.createConnection({
 //PROD
 // const connection = mysql.createConnection({
 //   host: "127.0.0.1",
+//   //  host: "181.215.69.72",
 //   user: "root",
 //   password: "apos*9900B",
 //   database: "my_champagne",
-//   PORT: 3306
+//   // PORT: 3306
 // });
 
 // Definiera en väg för roten
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+// app.get('/', (req, res) => {
+//   res.send('Hello World! WENNERBECK 2024-02-10');
+// });
 
 
 // Db connection setup and listen to port
 connection.connect();
-const port = 3000;
-app.listen(port, () => {
-  console.log(`server.js:listen() Server XYZ is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`server.js:listen() Server WENNERBECK.XYZ is running on port ${PORT}`);
 });
 
 // Lyssna på porten
@@ -76,6 +74,7 @@ app.get('/api/tables/:tableName', (req, res) => {
   fetchData(query, res);
   console.log('app.get ------------> ', query);
 });
+
 // general method to get data by query
 function fetchData(query, res) {
   console.log(`server.js:fetchData() ========> sql = `, query);
@@ -87,26 +86,6 @@ function fetchData(query, res) {
     res.json(results);
   });
 }
-// app.get("/api/Wines", (req, res) => {
-//   console.log(`server:get() - Wines`);
-//   const query =
-//     "SELECT Id, Producer, Wine, PN, PM, CH, IsRose, IsVintage, Vintage, Bought, Consumed, Saldo, PriceEUR, PriceSEK, BoughtWhen, BoughtWhere, Comment, LastUpdated FROM Wines";
-//   fetchData(query, res);
-// });
-// app.get("/api/Producers", (req, res) => {
-//   console.log(`server:get() - Producers`);
-//   const query =
-//     "SELECT Id, Producer, Village, Region, Email, Web FROM Producers";
-//   fetchData(query, res);
-// });
-// app.get("/api/Notes", (req, res) => {
-//   console.log(`server:get() - Notes`);
-//   const query =
-//     "SELECT Id, Datum, Location, Company, Producer, Wine, TastingNote, Comment, Score, BuyMore, LastUpdated FROM Notes";
-//   fetchData(query, res);
-// });
-// Generisk endpoint för att hämta alla rader från en specifik tabell
-
 
 // =============================================================================
 // UPDATE

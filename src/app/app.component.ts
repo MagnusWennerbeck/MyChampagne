@@ -55,6 +55,7 @@ export class AppComponent {
   }
 
   login() {}
+  
   handleMenuItemSelected(menuItem: string): void {
     this.menuItemSelected = menuItem;
     // console.log(
